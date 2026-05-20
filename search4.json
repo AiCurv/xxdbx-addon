@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "Why is the home screen for streamplay and stremio not working? Help.",
+    "host_name": "www.reddit.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/Extension",
+    "name": "Extension - CloudStream Wiki - Miraheze",
+    "snippet": "A plugin, or extension, is a CloudStream feature that can extend the functionality of the application by, for example, adding content to it, like films and ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "... extensions work, and how to install them safely. You'll also learn how to fix repository not loading or extension errors. Use this guide to ...\n... not loading or extension errors. Use this guide to install CloudStream repositories correctly. #CloudStream.",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=KYZ5m0CUxUA",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "Share your videos with friends, family, and the world.",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/1724",
+    "name": "Automatic plugins are not updating · Issue #1724 - GitHub",
+    "snippet": "Steps to reproduce When I turned on application plugins used to update and I was getting notified but now it's not happening Expected ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3/comments/1dax7w6/link_not_found_issue",
+    "name": "Link Not Found Issue : r/Cloudstream3 - Reddit",
+    "snippet": "There are alot of extensions that are showing \"Link not found\". I am a new user to cloudstream so I don't know much about the app. So I wanna ask how can I fix ...",
+    "host_name": "www.reddit.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "install extension repositories to cloudstream app. Declaration: This video and this platform do not ... Comments. 14. most of the repo has been ...\ninstall extension repositories to cloudstream app. Declaration: This video and this platform do not endorse any illicit undertakings. The ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://recloudstream.github.io/dokka",
+    "name": "All modules - recloudstream.github.io",
+    "snippet": "Companion · com.lagradost.cloudstream3Skip to content. AcraApplication Skip to content. Companion · CloudStreamAppSkip to content. Companion · CommonActivity.",
+    "host_name": "recloudstream.github.io",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/gethomepage/homepage/discussions/3135",
+    "name": "Hompage not showing any of my services · gethomepage homepage",
+    "snippet": "I was adding a service to my homepage and now none of the services display. I can see the bookmarks, and the search bar at the top, and the resources. But ...",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3/hot",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "r/Cloudstream3: Cloudstream 3, the best media-streaming app, or related to it! DISCLAIMER: No piracy is tolerated here, and the community is not…",
+    "host_name": "www.reddit.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

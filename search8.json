@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/CakesTwix/cloudstream-extensions-uk/blob/master/build.gradle.kts",
+    "name": "build.gradle.kts - CakesTwix/cloudstream-extensions-uk - GitHub",
+    "snippet": "import com.lagradost.cloudstream3.gradle.CloudstreamExtension import com.android.build.gradle.BaseExtension buildscript { dependencies ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://codeberg.org/cloudstream/cloudstream-extensions-eddy",
+    "name": "cloudstream-extensions-eddy - Codeberg",
+    "snippet": "Open the root build.gradle.kts, read the comments and replace all the placeholders · Familiarize yourself with the project structure. Most files are commented ...",
+    "host_name": "codeberg.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "How to add an extension repository to CloudStream step by step on Android. This tutorial explains where to add repository URLs, ...",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3/comments/1c9e46h/how_to_download_extensions_androidtv",
+    "name": "How to download extensions androidtv : r/Cloudstream3 - Reddit",
+    "snippet": "There are shortcodes for all the repos but I don't know where to get them anymore. My solution was to download the BroTV app which is a ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "This video guides you how you can add extension repositories to cloudstream app and install any extensions.. Add and install extension ...",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/HatsuneMikuUwU/cloudstream-extensions-uwu/blob/master/settings.gradle.kts",
+    "name": "cloudstream-extensions-uwu/settings.gradle.kts at master - GitHub",
+    "snippet": "A curated collection of CloudStream extensions for anime, donghua, movies, and TV series with Indonesian subtitles.",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=_NVfawoq7EY",
+    "name": "How to Install Cloudstream on Any Android TV Box (2026  - YouTube",
+    "snippet": "How to Install Cloudstream on Any Android TV Box (2025 Quick & Safe Guide) Subscribe to @DaveTech. if this video is helpful and educative.",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/extensions/blob/master/build.gradle.kts",
+    "name": "build.gradle.kts - recloudstream/extensions - GitHub",
+    "snippet": "// Cloudstream gradle plugin which makes everything work and builds plugins ... // https://github.com/recloudstream/cloudstream/blob/master/app/build.gradle.kts.",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/Sarlay/cloudstream-extensions-eddy/blob/master/settings.gradle.kts",
+    "name": "settings.gradle.kts - Sarlay/cloudstream-extensions-eddy - GitHub",
+    "snippet": "rootProject.name = \"CloudstreamPlugins\" // This file sets what projects are included. Every time you add a new project, you must add it // to the includes ...",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/Luna712/Luna712-CloudStream-Extensions",
+    "name": "Luna712-CloudStream-Extensions - GitHub",
+    "snippet": "Contribute to Luna712/Luna712-CloudStream-Extensions development by creating an account on GitHub ... build.gradle.kts · build.gradle.kts · gradle.properties.",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

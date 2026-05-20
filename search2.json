@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "... extension errors. Use this guide to install CloudStream repositories correctly. #CloudStream. ... extensions work, and how to install them safely.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/Extension/en",
+    "name": "Extension - CloudStream Wiki - Miraheze",
+    "snippet": "A plugin, or extension, is a CloudStream feature that can extend the functionality of the application by, for example, adding content to it, like films and ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/436",
+    "name": "Cs3-repo.error installing repo's links not found. App shows nothing",
+    "snippet": "Go to CloudStream's settings Go to Extensions. Add your favoured language by clicking \"Add repository\". Put the url(s) below into the \"Repository URL\" section.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "Add and install extension repositories to cloudstream app. Declaration: This video and this platform do not endorse any illicit undertakings ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Nuvio/comments/1szoudm/cloudstream_plugins_not_working",
+    "name": "Cloudstream plugins not working : r/Nuvio - Reddit",
+    "snippet": "Cloudstream repos give http error no matter how hard you try. Just stick to installing nuvio plugins from nuvioplugin website. They are working ...",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream-apk.com/cloudstream-repositories-extensions",
+    "name": "CloudStream Repositories & Extensions (Best Updated) - 2026",
+    "snippet": "CloudStream Repositories and Extensions extend the app's functionality. After installing them, users will have access to more movies & TV shows.",
+    "host_name": "cloudstream-apk.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=1YdS3I1kNhU",
+    "name": "How to Add Extension Repositories to Cloudstream (Setup Tutorial)",
+    "snippet": "=== The content on this channel is for informational and educational purposes only. Antiquio does not ... running and is greatly appreciated ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/79369683/the-installed-provider-plugins-are-not-consistent-with-the-packages-selected-in",
+    "name": "The installed provider plugins are not consistent with the packages",
+    "snippet": "Usually removing the .terraform.lock.hcl file and running terraform init fixes this issue. Unless there are strict provider requirements, you ...",
+    "host_name": "stackoverflow.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/List_of_unmaintained_repositories",
+    "name": "List of unmaintained repositories - CloudStream Wiki",
+    "snippet": "This is a list of CloudStream repositories that are no longer maintained and the plugins they contain. Plugins listed here are likely broken, and repos may ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/258",
+    "name": "Unable to install plugins from the extensions · Issue #258 - GitHub",
+    "snippet": "I have installed the cloudstream app on my Android TV(a smart tv with MI box 4k) · Then i have gone to the extensions section and added the ...",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

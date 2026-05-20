@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "... fix repository not loading or extension errors. Use this guide to install CloudStream repositories correctly. #CloudStream.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://gist.github.com/redtrillix/17a1d8eda270b6db831b85a860c0fcd0?permalink_comment_id=4596291",
+    "name": "CloudStream-Repository-Instructions.md · GitHub",
+    "snippet": "Go to Settings > Extensions > Add Repository · Copy relevant url into the Repository URL section · Give it a name · Download · Go into the repo, and install any ...",
+    "host_name": "gist.github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "I recently purchased amazon fire stick, installed cloud stream and added respos, and its extremely slow, doesn't load properly and when it does ...",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/Extension",
+    "name": "Extension - CloudStream Wiki - Miraheze",
+    "snippet": "If it doesn't fix it, try using a VPN. Or, if the website has a mirror site that is not censored, try using the clone site feature. Cannot install repository.",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.com.co/how-to-fix-cloudstream-no-links-found-not-loading-issues",
+    "name": "How to Fix CloudStream No Links Found/Not Loading Issues?",
+    "snippet": "If links don't appear even after updating, your extensions or repositories might be broken or outdated. Remove them and install fresh ones from ...",
+    "host_name": "cloudstream.com.co",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "install extension repositories to cloudstream app. Declaration: This video and this platform do not endorse any illicit undertakings. The ...",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://recloudstream.github.io/csdocs/troubleshooting",
+    "name": "Troubleshooting - Cloudstream 3 Documentation",
+    "snippet": "XYZ extension is not loading. Open the site in the browser. If the site is not loading in browser also, use VPN or try site cloning. If the site is working ...",
+    "host_name": "recloudstream.github.io",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/2225",
+    "name": "Installed Extension Disappears From Selection · Issue #2225 - GitHub",
+    "snippet": "The extension installs successfully but does not show up in the selection bar. Reinstalling the extension rarely fixes the issue, and in many ...",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://acloudstreamapp.com/no-links-found-error-in-cloudstream",
+    "name": "Fix No Links Found Error in Cloudstream App In a Few Steps",
+    "snippet": "Fix No Links Found or Extensions Not Loading Error. To fix these types of errors, use the latest version of the cloudstream, use a VPN, ensure a stable internet ...",
+    "host_name": "acloudstreamapp.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=QlgDXyqEGIE",
+    "name": "How to Add Extension Repositories to Cloudstream (2026 Guide)",
+    "snippet": "... installing extensions for better streaming options. We also ... Cloudstream is no longer working? (Quick fix 2026). infobox tv. Auto ...",
+    "host_name": "www.youtube.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

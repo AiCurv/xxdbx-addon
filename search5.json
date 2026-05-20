@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/mezz/JustEnoughItems/issues/3477",
+    "name": "[Crash/LongLoadingTime]: jei:forge_gui · Issue #3477 - GitHub",
+    "snippet": "Hey, when I want to join a single player world, it takes a really long time to load and sometimes crashes. I've looked into my latest log and saw this.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://forums.terraria.org/index.php?threads/how-to-solve-the-cloud-file-provider-is-not-running-errors.136598",
+    "name": "How to solve \"The cloud file provider is not running\" errors",
+    "snippet": "In the majority of cases, this crash is caused by OneDrive syncing the Terraria saves folder. To solve this issue, you must disable this syncing.",
+    "host_name": "forums.terraria.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "... not loading or extension errors. Use this guide to install CloudStream repositories correctly. #CloudStream.",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "r/Cloudstream3: Cloudstream 3, the best media-streaming app, or related to it! DISCLAIMER: No piracy is tolerated here, and the community is ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/258",
+    "name": "Unable to install plugins from the extensions · Issue #258 - GitHub",
+    "snippet": "I have installed the cloudstream app on my Android TV(a smart tv with MI box 4k) · Then i have gone to the extensions section and added the ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://recloudstream.github.io/csdocs/troubleshooting",
+    "name": "Troubleshooting - Cloudstream 3 Documentation",
+    "snippet": "XYZ extension is not loading. Open the site in the browser. If the site is not loading in browser also, use VPN or try site cloning. If the site is working ...",
+    "host_name": "recloudstream.github.io",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/List_of_extensions",
+    "name": "List of extensions - CloudStream Wiki",
+    "snippet": "This is a list of maintained CloudStream repositories and all the plugins they contain. Key Cloudstream providers repository",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "install extension repositories to cloudstream app. Declaration: This video and this platform do not endorse any illicit undertakings. The ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://troypoint.com/cloudstream",
+    "name": "How to Install & Use CloudStream (Google TV/Android/Fire TV)",
+    "snippet": "This post will provide you with an in-depth report on CloudStream APK with installation instructions and details to set up on your device.",
+    "host_name": "troypoint.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstreamapk.in",
+    "name": "Cloudstream APK v4.7.0: Download for Android & PC",
+    "snippet": "Simply tap the Download button to save episodes or movies. Use the Search bar at the top-left corner to find content inside the currently selected extension.",
+    "host_name": "cloudstreamapk.in",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=gTRjvMNyBz4",
+    "name": "How to add some library to Kotlin DSL build.gradle (settings.gradle.kts)",
+    "snippet": "I will show you how to add some custom library to your uh to your Android Studio project with cotlin DSL build gradal F files.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://developer.android.com/build/migrate-to-kotlin-dsl",
+    "name": "Migrate your build configuration from Groovy to Kotlin | Android Studio",
+    "snippet": "This page provides basic information about converting your Android app's Gradle build files from Groovy to Kotlin.",
+    "host_name": "developer.android.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/60492716/how-to-convert-this-subprojects-section-from-a-groovy-gradle-file-to-a-kotlin-kt",
+    "name": "How to convert this subprojects section from a groovy gradle file to a",
+    "snippet": "New to Gradle, Groovy and Kotlin and having trouble translating a groovy based gradle file to a kotlin based one. https://github.com/square/okio ...",
+    "host_name": "stackoverflow.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.gradle.org/current/userguide/kotlin_dsl.html",
+    "name": "Gradle Kotlin DSL Primer",
+    "snippet": "Gradle's Kotlin DSL offers an alternative to the traditional Groovy DSL, delivering an enhanced editing experience in supported IDEs.",
+    "host_name": "docs.gradle.org",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/JetBrains/kotlin/blob/master/build.gradle.kts",
+    "name": "build.gradle.kts - JetBrains/kotlin - GitHub",
+    "snippet": "* Enforces minimum secure versions for commonly used libraries across all subprojects. * These overrides address known vulnerabilities in transitive ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/18%2B",
+    "name": "18+ - CloudStream Wiki - Miraheze",
+    "snippet": "Plugins marked as 18+ can only be seen when NSFW content is enabled from the providers section of the settings by toggling on \"NSFW\" in \"Preferred media\" and ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "... not loading or extension errors. Use this guide to install CloudStream repositories correctly. #CloudStream.",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/1149",
+    "name": "Bug or weird change: nsfw extensions no longer visible with \"enable",
+    "snippet": "If you open providers->preferred content and disable nsfw, you'll hide all the nsfw extensions, that still works that way. · If you disable the ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "This video guides you how you can add extension repositories to cloudstream app and install any extensions.. Add and install extension ...\ninstall extension repositories to cloudstream app. Declaration: This video and this platform do not endorse any illicit undertakings. The ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.pk/cloudstream-repositories-extensions",
+    "name": "Best Cloudstream Repositories & Extensions – All Working 2026",
+    "snippet": "If your CloudStream extensions stop working, streaming links fail to load, or new content is not appearing, the issue may be an outdated repository. Keeping ...",
+    "host_name": "cloudstream.pk",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Nuvio/comments/1szoudm/cloudstream_plugins_not_working",
+    "name": "Cloudstream plugins not working : r/Nuvio - Reddit",
+    "snippet": "Cloudstream repos give http error no matter how hard you try. Just stick to installing nuvio plugins from nuvioplugin website. They are working ...",
+    "host_name": "www.reddit.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream-apk.com/cloudstream-repositories-extensions",
+    "name": "CloudStream Repositories & Extensions (Best Updated) - 2026",
+    "snippet": "CloudStream Repositories and Extensions extend the app's functionality. After installing them, users will have access to more movies & TV shows.",
+    "host_name": "cloudstream-apk.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=zIrHkEgmsTQ",
+    "name": "How To Add Extension Repositories To Cloudstream (FULL GUIDE",
+    "snippet": "... not loading, extensions not showing up, or installation failures. If you want to customize Cloudstream and understand how extension ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/List_of_unmaintained_18%2B_repositories",
+    "name": "List of unmaintained 18+ repositories - CloudStream Wiki",
+    "snippet": "This is a list of 18+ CloudStream repositories that are no longer maintained and the plugins they contain.",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/258",
+    "name": "Unable to install plugins from the extensions · Issue #258 - GitHub",
+    "snippet": "I have installed the cloudstream app on my Android TV(a smart tv with MI box 4k) · Then i have gone to the extensions section and added the ...\nI have installed the cloudstream app on my Android TV(a smart tv with MI box 4k); Then i have gone to the extensions section and added the ...",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

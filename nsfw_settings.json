@@ -1,0 +1,18 @@
+{
+  "code": 200,
+  "data": {
+    "description": "",
+    "html": "<html><head><meta name=\"color-scheme\" content=\"light dark\"></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">rootProject.name = \"CloudstreamPlugins\"\n\n// This file sets what projects are included. All new projects should get automatically included unless specified in \"disabled\" variable.\n\nval disabled = listOf<String>()\n\nFile(rootDir, \".\").eachDir { dir ->\n    if (!disabled.contains(dir.name) && File(dir, \"build.gradle.kts\").exists()) {\n        include(dir.name)\n    }\n}\n\nfun File.eachDir(block: (File) -> Unit) {\n    listFiles()?.filter { it.isDirectory }?.forEach { block(it) }\n}\n\n\n// To only include a single project, comment out the previous lines (except the first one), and include your plugin like so:\n// include(\"PluginName\")\n</pre></body></html>",
+    "title": "",
+    "url": "https://raw.githubusercontent.com/punpunsx/cloudstream-18plus-Extensions/master/settings.gradle.kts",
+    "usage": {
+      "tokens": 183
+    }
+  },
+  "meta": {
+    "usage": {
+      "tokens": 183
+    }
+  },
+  "status": 20000
+}

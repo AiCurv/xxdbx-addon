@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/1149",
+    "name": "Bug or weird change: nsfw extensions no longer visible with \"enable",
+    "snippet": "If you open providers->preferred content and disable nsfw, you'll hide all the nsfw extensions, that still works that way. · If you disable the ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/18%2B",
+    "name": "18+ - CloudStream Wiki - Miraheze",
+    "snippet": "Plugins marked as 18+ can only be seen when NSFW content is enabled from the providers section of the settings by toggling on \"NSFW\" in \"Preferred media\" and ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "r/Cloudstream3: Cloudstream 3, the best media-streaming app, or related to it! DISCLAIMER: No piracy is tolerated here, and the community is ...",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=z3NjaaxeVtY",
+    "name": "How to Add Extension Repositories to Cloudstream - YouTube",
+    "snippet": "install extension repositories to cloudstream app. Declaration: This video and this platform do not endorse any illicit undertakings. The ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "... not loading or extension errors. Use this guide to install CloudStream repositories correctly. #CloudStream.",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/List_of_unmaintained_18%2B_repositories",
+    "name": "List of unmaintained 18+ repositories - CloudStream Wiki",
+    "snippet": "This is a list of 18+ CloudStream repositories that are no longer maintained and the plugins they contain.",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.pk/cloudstream-repositories-extensions",
+    "name": "Best Cloudstream Repositories & Extensions – All Working 2026",
+    "snippet": "If your CloudStream app is not showing movies, extensions are empty, or streaming links are failing to load, the real issue is usually missing or outdated ...",
+    "host_name": "cloudstream.pk",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=QlgDXyqEGIE",
+    "name": "How to Add Extension Repositories to Cloudstream (2026 Guide)",
+    "snippet": "This content isn't available.",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/HatsuneMikuUwU/cloudstream-extensions-uwu",
+    "name": "HatsuneMikuUwU/cloudstream-extensions-uwu: A curated  - GitHub",
+    "snippet": "A curated collection of CloudStream extensions for anime, donghua, movies, and TV series with Indonesian subtitles.",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3/new",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "r/Cloudstream3: Cloudstream 3, the best media-streaming app, or related to it! DISCLAIMER: No piracy is tolerated here, and the community is not…",
+    "host_name": "www.reddit.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

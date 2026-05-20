@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/HatsuneMikuUwU/cloudstream-extensions-uwu/blob/master/settings.gradle.kts",
+    "name": "cloudstream-extensions-uwu/settings.gradle.kts at master - GitHub",
+    "snippet": "A curated collection of CloudStream extensions for anime, donghua, movies, and TV series with Indonesian subtitles.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/18%2B",
+    "name": "18+ - CloudStream Wiki - Miraheze",
+    "snippet": "Plugins marked as 18+ can only be seen when NSFW content is enabled from the providers section of the settings by toggling on \"NSFW\" in \"Preferred media\" and ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=GSdF7slN8gk",
+    "name": "How to Add Extension Repository to CloudStream - Step by Step",
+    "snippet": "How to add an extension repository to CloudStream step by step on Android. This tutorial explains where to add repository URLs, ...",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://codeberg.org/kaysees/cloudstream-extensions-horis",
+    "name": "kaysees/cloudstream-extensions-horis - Codeberg.org",
+    "snippet": "Horis-Extensions. Used to load providers for Cloudstream · download · contributors last update forks stars open ...",
+    "host_name": "codeberg.org",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=kFWmL5opJNk",
+    "name": "How to Build a Custom Gradle Plugin to Share Project Config",
+    "snippet": "In this video I'll show you how you can manage a multi-module project's config by using a custom Gradle plugin.",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.gradle.org/current/userguide/kotlin_dsl.html",
+    "name": "Gradle Kotlin DSL Primer",
+    "snippet": "Gradle's Kotlin DSL offers an alternative to the traditional Groovy DSL, delivering an enhanced editing experience in supported IDEs.",
+    "host_name": "docs.gradle.org",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/CakesTwix/cloudstream-extensions-uk/blob/master/build.gradle.kts",
+    "name": "build.gradle.kts - CakesTwix/cloudstream-extensions-uk - GitHub",
+    "snippet": "Це спеціальне розширення для перегляду фільмів, серіалів та аніме в якісному українському дубляжу від різних постачальників в стрімінговій ...",
+    "host_name": "github.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "This makes your anime experience even better. Now Cloudstream has IntroDB and anime skip; this is perfect.",
+    "host_name": "www.reddit.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/79746512/android-gradle-convention-plugin-build-type-configurations-not-created-when-bui",
+    "name": "Android Gradle Convention Plugin: Build type configurations not",
+    "snippet": "Creating build types in the convention plugin reduces its reusability since different modules might need different build types. Code Example.",
+    "host_name": "stackoverflow.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://mdapp.medium.com/a-comprehensive-guide-for-upgrading-to-the-gradle-kotlin-dsl-for-android-apps-f6b608807e4e",
+    "name": "A Comprehensive Guide for Upgrading to the Gradle Kotlin DSL for",
+    "snippet": "A Comprehensive Guide for Upgrading to the Gradle Kotlin DSL for Android Apps. · Back Up a Sec · Learn a Completely New Build Scripting Language.",
+    "host_name": "mdapp.medium.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
