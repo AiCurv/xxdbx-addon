@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=5U4OVXDw1Zo",
+    "name": "Scrape Any Website in 5 Minutes! Web Scraping Tutorial - YouTube",
+    "snippet": "In this tutorial, I will demonstrate how to efficiently scrape any website in just 5 minutes, using the Bright Data Web Unlocker tool.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://community.make.com/t/a-web-scraping-method-to-scrape-many-websites-of-different-structure-and-content/63099",
+    "name": "A web scraping method to scrape many websites of different",
+    "snippet": "I want to scrape data from different companies' websites, and then feed the data (HTML text content) from each website to a ChatGPT module to get insights.",
+    "host_name": "community.make.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=WYp0dmZOHXM",
+    "name": "Web Scraping 101: How To Scrape 99% of Sites - YouTube",
+    "snippet": "This video could help you feel more comfortable and get you ready to dive into scraping the web and taking data when you can't find it anywhere else.",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ubc-library-rc.github.io/intro-web-scraping/content/understanding-a-website.html",
+    "name": "Understanding website structure | Introduction to Web Scraping",
+    "snippet": "Web scraping tools use a website's HTML structure to navigate the page and identify the content to scrape.",
+    "host_name": "ubc-library-rc.github.io",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://brightdata.com/blog/how-tos/html-web-scraping",
+    "name": "The Complete HTML Web Scraping Tutorial 2026 - Bright Data",
+    "snippet": "Discover how to master HTML web scraping to efficiently collect data from websites, perfect for enhancing your projects and strategies.",
+    "host_name": "brightdata.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.webharvy.com/docs/scraping-categories.html",
+    "name": "Scrape Data from Multiple Categories | WebHarvy User Guide",
+    "snippet": "Learn how to scrape data from multiple categories. Configure multi-level category scraping and extract data efficiently from various sections of a website.",
+    "host_name": "www.webharvy.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.headmind.com/en/web-scraping-the-easy-way-to-collect-and-structure-data-from-the-web",
+    "name": "Web Scraping: The easy way to collect and structure data from the",
+    "snippet": "Web scraping is a specialized technique to extract data from a website via a script or a program. The data are collected and exported in a structured way.",
+    "host_name": "www.headmind.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=A1wmrpaCiWA",
+    "name": "How to Scrape Websites Like A PRO! (Full Tutorial) - YouTube",
+    "snippet": "I'm going to show you how to build a web scraping and extraction engine using webscraper doio and make.com.",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=8dTpNajxaH0",
+    "name": "Scraping Data from a Real Website | Web Scraping in Python",
+    "snippet": "In this lesson we are going to be scraping data from a real website and putting it into a panda's data frame and maybe even exporting it to CSV.",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=7xmqB3rsr-M",
+    "name": "Sub-Categories | Using Web Scraper Extension | No Code Scraping",
+    "snippet": "Learn how to scrape ecommerce websites step by step using “Web Scraper”. This complete “Web Scraper.IO tutorial” shows you “how to use Web ...",
+    "host_name": "www.youtube.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

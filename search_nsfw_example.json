@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/recloudstream/cloudstream/issues/1149",
+    "name": "Bug or weird change: nsfw extensions no longer visible with \"enable",
+    "snippet": "If you open providers->preferred content and disable nsfw, you'll hide all the nsfw extensions, that still works that way. · If you disable the ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3",
+    "name": "r/Cloudstream3 - Reddit",
+    "snippet": "I am reaching out to the subreddit to see if anyone else facing this issue and have a workaround in terms of the search result limitation. As I ...\nr/Cloudstream3: Cloudstream 3, the best media-streaming app, or related to it! DISCLAIMER: No piracy is tolerated here, and the community is ...",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/HowToMen/comments/xthrpq/app_cloudstream3",
+    "name": "[app] Cloudstream-3 : r/HowToMen - Reddit",
+    "snippet": "It's an app that finds movies, tv shows and animes from many streaming websites and combines them all in a beautiful interface.",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/recloudstream/cloudstream",
+    "name": "GitHub - recloudstream/cloudstream: Android app for streaming",
+    "snippet": "Even if you can't contribute to the code or documentation, we always look for those who can contribute to translation and language support. Your contribution is exceptionally appreciated; you can check our translation from the figure below.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/Stormunblessed/CloudStream-3",
+    "name": "GitHub - Stormunblessed/cloudstream-3: Android app for",
+    "snippet": "It simply crawls, aggregates and displayes links in a convenient, user-friendly interface. It merely scrapes 3rd-party websites that are publicly accessable via any regular web browser.",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/AniFOSS/CloudStream-3",
+    "name": "GitHub - AniFOSS/CloudStream-3: Android app for streaming and",
+    "snippet": "It simply crawls, aggregates and displayes links in a convenient, user-friendly interface. It merely scrapes 3rd-party websites that are publicly accessable via any regular web browser.",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/cloudstream3",
+    "name": "CloudStream - GitHub",
+    "snippet": "People This organization has no public members. You must be a member to see who’s a part of this organization.",
+    "host_name": "github.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/cloudstream3/cs3-android",
+    "name": "GitHub - cloudstream3/cs3-android: Android app for streaming",
+    "snippet": "Android app for streaming and downloading Movies, TV-Series and Anime. - cloudstream3/cs3-android",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/adambomber/CloudStream-3",
+    "name": "GitHub - adambomber/CloudStream-3: Android app for streaming",
+    "snippet": "It simply crawls, aggregates and displayes links in a convenient, user-friendly interface. It merely scrapes 3rd-party websites that are publicly accessable via any regular web browser.",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/AniFOSS/CloudStream-3/blob/master/README.md",
+    "name": "CloudStream-3/README.md at master · AniFOSS  - GitHub",
+    "snippet": "It simply crawls, aggregates and displayes links in a convenient, user-friendly interface. It merely scrapes 3rd-party websites that are publicly accessable via any regular web browser.",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=aClnnoQK9G0",
+    "name": "Data Scraping from Websites to Excel | Web Scraper",
+    "snippet": "In this video I'm going to show you how to scrape data from websites.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "May 21, 2022",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/18%2B",
+    "name": "18+ - CloudStream Wiki - Miraheze",
+    "snippet": "Some third-party plugins for CloudStream are 18+. Plugins marked as 18+ can only be seen when NSFW content is enabled from the providers section of the ...",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cloudstream.miraheze.org/wiki/List_of_extensions",
+    "name": "List of extensions - CloudStream Wiki",
+    "snippet": "⭐ Invidious – access YouTube through an Invidious instance and through NewPipe's scraper. When the plugin breaks, try another Invidious instance by using the clone site feature and pasting a URL from uptime.invidious.io. The only plugin in this repo is \"Mega\".",
+    "host_name": "cloudstream.miraheze.org",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/owenconnorz/XXX",
+    "name": "GitHub - owenconnorz/XXX: X CloudStream Provider",
+    "snippet": "We hereby issue this notice to inform you that these extensions just function like an ordinary browser (like your browser) that fetch video files from internet, and do not violate the provisions of the Digital Millennium Copyright Act (DMCA).",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://recloudstream.github.io/csdocs/devs/scraping/gettingstarted",
+    "name": "Requests based scraping tutorial - Cloudstream 3 Documentation",
+    "snippet": "Once you've read and understood the concepts behind scraping take a look at a provider for CloudStream. I added tons of comments to make every aspect of writing CloudStream providers clear.",
+    "host_name": "recloudstream.github.io",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Cloudstream3/comments/yj8tdw/how_do_you_add_extensions_and_repositories",
+    "name": "how do you add extensions and repositories? : r/Cloudstream3",
+    "snippet": "Launch your CS3 app and go to your settings. Go to Extensions -> Add Repository (Bottom-Right). Name the Repository whatever, but I recommend whatever it's named on the site. Go to the CS3 site on your phone / other device and hit, \"copy link\". Paste the link out so you can type it in the \"Repository URL\" section.",
+    "host_name": "www.reddit.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.hdpornfull.com",
+    "name": "HDPornfull - Latest HD Porn Videos, 0day Porn Movies",
+    "snippet": "Watch Latest Release HD Porn Videos, 0day Porn and Sex Porn Movies. Daily Updated.",
+    "host_name": "www.hdpornfull.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://deepwiki.com/phisher98/cloudstream-extensions-phisher",
+    "name": "phisher98/cloudstream-extensions-phisher | DeepWiki",
+    "snippet": "This document covers the overall architecture, build system, and major components of the extension ecosystem. For detailed information about individual content providers, see Content Providers.",
+    "host_name": "deepwiki.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://preview.recode.net/cloud/cloud-stream-repository.html",
+    "name": "Cloud Stream Repository - Cloud Provider Performance",
+    "snippet": "You can add all the working extensions by typing the text ' megarepo ' under the extensions in the url section. These repositories are built by the community members.",
+    "host_name": "preview.recode.net",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  }
+]
