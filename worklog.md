@@ -1,23 +1,32 @@
 ---
 Task ID: 1
-Agent: Super Z (Main)
-Task: Fix Cloudstream extension build for AiCurv/aicurv repository
+Agent: Main Agent
+Task: Build W1MP Stremio Addon V3.0 - Final Build
 
 Work Log:
-- Cloned the repository from https://github.com/AiCurv/aicurv
-- Examined all existing files and compared against official recloudstream/TestPlugins template
-- Identified 7+ critical issues causing build failures
-- Fixed root build.gradle.kts: added com.lagradost.cloudstream3.gradle plugin, cloudstream stubs dependency, essential libraries (NiceHttp, jsoup, jackson, kotlin-stdlib), changed JVM target from 17 to 1.8, switched gradle plugin to -SNAPSHOT
-- Fixed helper function type resolution: changed from extensions.getByName().configuration() to extensions.configure<T>
-- Upgraded Kotlin from 2.1.0 to 2.3.0 (Cloudstream pre-release stubs compiled with Kotlin 2.3.0 metadata)
-- Added back permissions: contents: write to workflow for GITHUB_TOKEN push access
-- Fixed workflow build copy paths to match TestPlugins template
-- Fixed repo.json: corrected GitHub org name from aicurv to AiCurv
-- Simplified settings.gradle.kts with auto-include pattern
-- Adjusted gradle.properties memory settings for CI
+- Researched Stremio addon protocol: how externalUrl streams with stremio:///detail/ deep links enable clickable navigation (same pattern as TMDB Collection addon)
+- Researched custom types in manifest to create own section in Stremio discovery
+- Analyzed w1mp.com HTML structure: model links (/models/), tag links (/tags/), category links (/categories/)
+- Identified "No Streams found" bug: stream resource idPrefixes only had ["video_"] but channel videos might use compound IDs
+- Fixed "No Streams found" bug: added ["video_", "model_", "tag_"] to stream idPrefixes and extractVideoId() handles compound IDs
+- Added Tags catalog (channel type) with search and pagination - tags from /tags/ page with video counts
+- Added Tag meta handler (channel type) - shows videos from /tags/{slug}/ page
+- Added clickable model links in streams using externalUrl with stremio:///detail/channel/model_{slug} deep links
+- Added clickable tag links in streams using externalUrl with stremio:///detail/channel/tag_{slug} deep links
+- Models first, then tags (5 max), then direct MP4 stream
+- Fixed model poster extraction: img.image selector, data-model-id fallback for CDN URL construction
+- Fixed video sorting on model pages: sorted by video ID descending (higher = newer on KVS)
+- Fixed video meta: now fetches from /video/{id}/w1mp/ page for full metadata including models and tags
+- Deployed to Vercel: https://w1mp-stremio-addon.vercel.app/manifest.json
 
 Stage Summary:
-- Build now passes successfully on GitHub Actions
-- builds branch contains HDPornFullProvider.cs3 (2189 bytes) and plugins.json (731 bytes)
-- plugins.json properly lists the HDPornFullProvider extension with all metadata
-- Repo URL for Cloudstream app: https://github.com/AiCurv/aicurv/raw/main/repo.json
+- W1MP Stremio Addon V3.0 deployed at https://w1mp-stremio-addon.vercel.app/manifest.json
+- All endpoints tested and working:
+  - /catalog/channel/models.json - 28 models per page, searchable
+  - /catalog/channel/tags.json - 40 tags per page, searchable, sorted by video count
+  - /meta/channel/model_{slug}.json - model page with videos sorted newest first
+  - /meta/channel/tag_{slug}.json - tag page with videos sorted newest first
+  - /stream/movie/video_{id}.json - MP4 stream + model nav links + tag nav links
+  - /meta/movie/video_{id}.json - video with genres (tags), cast (models), description
+- Model posters from cdnstatic.w1mp.com working (martin-spell confirmed)
+- Kwini Kim poster constructed from data-model-id (24886)
