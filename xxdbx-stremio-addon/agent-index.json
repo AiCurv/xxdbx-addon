@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "name": "stremio-ai-knowledge",
+    "version": "2.0.0",
+    "description": "AI Agent Knowledge Base for Stremio Addon Development",
+    "updated": "2026-06-07"
+  },
+  "critical_versions": {
+    "node": ">=16",
+    "stremio-addon-sdk": "^1.6.10",
+    "cheerio": "^1.0.0",
+    "node-fetch": "^2.7.0"
+  },
+  "protocol": {
+    "routes": [
+      "/manifest.json",
+      "/catalog/{type}/{id}.json",
+      "/meta/{type}/{id}.json",
+      "/stream/{type}/{id}.json"
+    ]
+  },
+  "content_types": {
+    "channel": {
+      "description": "Multiple videos grouped under one entity. Use for models, collections, channels, performers.",
+      "usage": "A model/performer page with multiple videos becomes a 'channel' type. The meta handler returns a videos array with episode-like entries."
+    },
+    "movie": {
+      "description": "Single standalone video. One meta entry maps to one stream.",
+      "usage": "A standalone video page that is not part of a series or collection."
+    },
+    "series": {
+      "description": "Episodic content with seasons and episodes.",
+      "usage": "TV shows or content organized into seasons/episodes."
+    },
+    "tv": {
+      "description": "Live TV channels.",
+      "usage": "Live streaming television channels."
+    }
+  },
+  "errors_quick": {
+    "kvs_404_no_slug": "Use /embed/{id}/ instead of /video/{id}/ \u2014 KVS requires slug in video URLs",
+    "vercel_timeout": "Cache responses, minimize HTTP requests, use 10s max on Hobby plan",
+    "kvs_slug_required": "Store full video URLs from model pages or use embed URLs",
+    "defaultVideoId_loop": "NEVER set defaultVideoId in channel meta \u2014 causes infinite back-loop in Stremio",
+    "kvs_get_stream_ua_redirect": "KVS /get_stream/ URLs work as direct stream.url \u2014 Stremio's UA triggers 302 CDN redirect. NEVER use externalUrl for video streams.",
+    "missing_nav_streams": "Add externalUrl streams with stremio:///detail/channel/ deep links \u2014 meta.links alone is NOT enough. Users navigate from the streams list 95% of the time.",
+    "base64_ids_break_meta": "NEVER use base64/base64url for Stremio IDs. Use encodeURIComponent/decodeURIComponent instead. Base64 produces opaque strings that can't be used as URL paths and break the meta handler (Error #16).",
+    "non_kvs_no_embed_needed": "Not all adult sites are KVS. Check site structure first. Some sites (like xxdbx.com) have everything on /view/{id} \u2014 no embed page needed."
+  },
+  "app_limitations": {
+    "library_is_manual": "User must explicitly click 'Add to Library' \u2014 there is no programmatic way to add items to a user's library.",
+    "search_is_string_only": "Stremio search is plain-text string matching only. No filters, no faceted search, no advanced queries.",
+    "caching_is_app_side": "The Stremio app handles caching of catalog and stream responses. Addons cannot control cache TTL directly. Use behaviorHints to influence caching behavior.",
+    "channel_videos_not_streams": "Channel type videos are shown as a clickable list, NOT as stream options. Click a video to see its streams.",
+    "search_returns_mixed_types": "Search queries all searchable catalogs across types. Both channel and movie results appear together."
+  },
+  "video_source_types": {
+    "mp4": {
+      "description": "Direct MP4 video file URL. This includes KVS /get_stream/ URLs that redirect to CDN via User-Agent-based 302.",
+      "implementation": "Return as stream.url with behaviorHints.notWebReady: false. Stremio's player UA triggers 302 redirect for KVS get_stream URLs.",
+      "stream_format": {
+        "url": "https://example.com/video.mp4",
+        "title": "Quality Label",
+        "behaviorHints": {
+          "notWebReady": false
+        }
+      }
+    },
+    "m3u8": {
+      "description": "HLS streaming playlist URL",
+      "implementation": "Return as stream.url with behaviorHints.notWebReady: true. Stremio desktop does not natively handle HLS without this flag.",
+      "stream_format": {
+        "url": "https://example.com/stream.m3u8",
+        "title": "Quality Label",
+        "behaviorHints": {
+          "notWebReady": true
+        }
+      }
+    },
+    "torrent": {
+      "description": "BitTorrent info hash with optional trackers",
+      "implementation": "Return stream object with infoHash and optional sources array of tracker URLs.",
+      "stream_format": {
+        "infoHash": "0123456789abcdef0123456789abcdef01234567",
+        "sources": [
+          "tracker:udp://tracker.example.com:6969/announce"
+        ],
+        "title": "Quality Label"
+      }
+    },
+    "cross_navigation": {
+      "description": "Stremio deep links for in-app navigation (NOT for video playback). The ONLY acceptable use of externalUrl.",
+      "implementation": "Return as stream.externalUrl with stremio:///detail/ deep links. This navigates WITHIN Stremio, not a browser/webview.",
+      "stream_format": {
+        "externalUrl": "stremio:///detail/channel/model_kwini-kim",
+        "title": "Model Name",
+        "behaviorHints": {
+          "notWebReady": true
+        }
+      }
+    }
+  },
+  "id_encoding": {
+    "rule": "ALWAYS use encodeURIComponent/decodeURIComponent for Stremio IDs that contain names",
+    "correct": {
+      "encoding": "encodeURIComponent('Della Cate')",
+      "result": "star_Della%20Cate",
+      "decoding": "decodeURIComponent('Della%20Cate')",
+      "decoded": "Della Cate"
+    },
+    "wrong": {
+      "encoding": "Buffer.from('Della Cate').toString('base64url')",
+      "result": "star_RGVsbGEgQ2F0ZQ",
+      "problem": "Opaque string, can't be used as URL path, meta handler can't decode it to scrape /stars/Della+Cate"
+    }
+  },
+  "stream_fix_v2": {
+    "discovery": "KVS /get_stream/ URLs are User-Agent-based redirect gateways. Browser UA gets 200 HTML, but Stremio's non-browser UA gets 302 redirect to CDN (vkuser.net) which serves proper MP4 files.",
+    "key_rule": "NEVER use externalUrl for video streams \u2014 it opens a browser/webview. Always use stream.url for direct video URLs.",
+    "ua_behavior": {
+      "browser_ua": "200 HTML (player page)",
+      "stremio_ua": "302 redirect to CDN",
+      "android_stagefright_ua": "302 redirect to CDN",
+      "vlc_ua": "200 HTML",
+      "ffmpeg_ua": "200 HTML",
+      "curl_default_ua": "200 HTML"
+    }
+  }
+}
