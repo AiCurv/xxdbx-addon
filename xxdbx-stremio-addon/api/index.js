@@ -7,6 +7,8 @@ const app = express();
 app.use(cors());
 
 const BASE_URL = 'https://xxdbx.com';
+// Will be overridden per-request from req.headers.host
+const ADDON_BASE_DEFAULT = 'https://xxdbx-addon.vercel.app';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
 // ─── Helpers ───────────────────────────────────────────────
@@ -18,7 +20,6 @@ async function fetchPage(url) {
 }
 
 function encodeNameForId(name) {
-  // Use URI encoding which is fully reversible
   return encodeURIComponent(name);
 }
 
@@ -39,12 +40,10 @@ function parseVideoCard(el, $) {
   const title = el.find('.v_title').text().trim();
   const duration = el.find('.v_dur').text().trim();
 
-  // Thumbnail
   const imgEl = el.find('.v_pic').first();
   const thumbSrc = imgEl.attr('data-src') || imgEl.attr('src') || '';
   const poster = thumbSrc ? (thumbSrc.startsWith('http') ? thumbSrc : `https://xxdbx.com${thumbSrc}`) : '';
 
-  // Tags section: extract stars, channel, date
   const stars = [];
   let channel = '';
   let date = '';
@@ -78,7 +77,7 @@ function parseVideoCards(html) {
 
 const MANIFEST = {
   id: 'community.xxdbx',
-  version: '6.0.0',
+  version: '6.1.0',
   name: 'XXDBX',
   description: 'Browse stars, channels, tags, dates and videos from xxdbx.com. Click stars/channels/tags/dates in streams to navigate!',
   logo: 'https://www.google.com/s2/favicons?domain=xxdbx.com&sz=256',
@@ -216,7 +215,6 @@ async function handleCatalog(type, id, extra = {}) {
   }
 
   if (type === 'channel' && id === 'stars') {
-    // Scrape multiple pages to build a star catalog
     const pagesToFetch = search ? [1] : [1, 2, 3, 4, 5];
     const starSet = new Map();
 
@@ -269,9 +267,7 @@ async function handleCatalog(type, id, extra = {}) {
   }
 
   if (type === 'channel' && id === 'tags') {
-    // Get tags from video detail pages
     if (search) {
-      // Search by scraping a video page and checking if tag matches
       const html = await fetchPage(`${BASE_URL}/search/${encodeURIComponent(search)}`);
       const $ = cheerio.load(html);
       const videoLinks = [];
@@ -297,7 +293,6 @@ async function handleCatalog(type, id, extra = {}) {
         posterShape: 'poster'
       }));
     }
-    // Default tags catalog — scrape from a few video pages
     const html = await fetchPage(BASE_URL);
     const $ = cheerio.load(html);
     const videoLinks = [];
@@ -345,7 +340,6 @@ async function handleCatalog(type, id, extra = {}) {
     if (search) {
       dates = dates.filter(([name]) => name.includes(search));
     }
-    // Sort dates descending
     dates.sort((a, b) => b[0].localeCompare(a[0]));
     return dates.slice(skip, skip + 30).map(([name, poster]) => ({
       id: `date_${encodeNameForId(name)}`,
@@ -362,7 +356,6 @@ async function handleCatalog(type, id, extra = {}) {
 // ─── Meta Handler ──────────────────────────────────────────
 
 async function handleMeta(type, id) {
-  // Video meta
   if (id.startsWith('video_')) {
     const videoId = id.replace('video_', '');
     const html = await fetchPage(`${BASE_URL}/view/${videoId}`);
@@ -373,7 +366,6 @@ async function handleMeta(type, id) {
     const poster = $('video#p').attr('poster');
     const posterUrl = poster ? (poster.startsWith('http') ? poster : `${BASE_URL}${poster}`) : '';
 
-    // Extract tags for genres
     const genres = [];
     $('.tags a[href^="/search/"]').each((_, a) => {
       genres.push($(a).text().trim());
@@ -391,7 +383,6 @@ async function handleMeta(type, id) {
     };
   }
 
-  // Star meta (channel type)
   if (id.startsWith('star_')) {
     const starName = decodeNameFromId(id.replace('star_', ''));
     const url = `${BASE_URL}/stars/${encodeURIComponent(starName)}`;
@@ -429,7 +420,6 @@ async function handleMeta(type, id) {
     };
   }
 
-  // Channel meta (channel type)
   if (id.startsWith('ch_')) {
     const chName = decodeNameFromId(id.replace('ch_', ''));
     const url = `${BASE_URL}/channels/${encodeURIComponent(chName)}`;
@@ -467,7 +457,6 @@ async function handleMeta(type, id) {
     };
   }
 
-  // Tag meta (channel type)
   if (id.startsWith('tag_')) {
     const tagName = decodeNameFromId(id.replace('tag_', ''));
     const url = `${BASE_URL}/search/${encodeURIComponent(tagName)}`;
@@ -505,7 +494,6 @@ async function handleMeta(type, id) {
     };
   }
 
-  // Date meta (channel type)
   if (id.startsWith('date_')) {
     const dateStr = decodeNameFromId(id.replace('date_', ''));
     const url = `${BASE_URL}/dates/${encodeURIComponent(dateStr)}`;
@@ -548,7 +536,7 @@ async function handleMeta(type, id) {
 
 // ─── Stream Handler ────────────────────────────────────────
 
-async function handleStream(type, id) {
+async function handleStream(type, id, addonBase) {
   if (!id.startsWith('video_')) return { streams: [] };
 
   const videoId = id.replace('video_', '');
@@ -556,17 +544,19 @@ async function handleStream(type, id) {
   const $ = cheerio.load(html);
 
   const streams = [];
+  const base = addonBase || ADDON_BASE_DEFAULT;
 
-  // Extract direct video URLs from <source> tags
+  // Extract video URLs from <source> tags and return PROXIED URLs
+  // The direct CDN URLs are IP-bound — they 403 from the user's device
+  // so we proxy through Vercel where the token was generated from the same IP
   $('video source').each((_, el) => {
-    const src = $(el).attr('src') || '';
     const quality = $(el).attr('title') || '';
-    if (src) {
-      const fullUrl = src.startsWith('//') ? `https:${src}` : src;
+    if (quality) {
+      // Use proxy URL — the proxy will fetch the page fresh and pipe the MP4
       streams.push({
         name: 'XXDBX',
-        title: quality ? `${quality}` : '',
-        url: fullUrl,
+        title: quality,
+        url: `${base}/play/${videoId}/${quality.replace('p', '')}.mp4`,
         behaviorHints: { notWebReady: false }
       });
     }
@@ -576,9 +566,7 @@ async function handleStream(type, id) {
   const qualityOrder = { '1080p': 3, '720p': 2, '360p': 1 };
   streams.sort((a, b) => (qualityOrder[b.title] || 0) - (qualityOrder[a.title] || 0));
 
-  // Add clickable channel streams for stars, channel, dates, and tags
-  // These use externalUrl with stremio:/// deep links — the TMDB Collection pattern
-
+  // Add clickable channel streams
   // Stars
   $('.tags a[href^="/stars/"]').each((_, el) => {
     const name = $(el).text().trim();
@@ -621,7 +609,7 @@ async function handleStream(type, id) {
     }
   });
 
-  // Tags (search links)
+  // Tags
   $('.tags a[href^="/search/"]').each((_, el) => {
     const name = $(el).text().trim();
     if (name) {
@@ -637,6 +625,86 @@ async function handleStream(type, id) {
 
   return { streams };
 }
+
+// ─── Stream Proxy ──────────────────────────────────────────
+// The CDN tokens are IP-bound — they only work from the IP that fetched the video page.
+// This proxy fetches the page fresh from Vercel's IP and pipes the MP4 data back.
+
+const QUALITY_MAP = {
+  '1080.mp4': '1080p',
+  '720.mp4': '720p',
+  '360.mp4': '360p'
+};
+
+app.get('/play/:videoId/:qualityFile', async (req, res) => {
+  const { videoId, qualityFile } = req.params;
+
+  try {
+    // Fetch the video page fresh from Vercel's IP to get valid tokens
+    const html = await fetchPage(`${BASE_URL}/view/${videoId}`);
+    const $ = cheerio.load(html);
+
+    // Find the matching quality source
+    let mp4Url = null;
+    $('video source').each((_, el) => {
+      const quality = $(el).attr('title') || '';
+      const src = $(el).attr('src') || '';
+      // Match quality: "1080p" → "1080.mp4", "720p" → "720.mp4", etc.
+      if (quality && src && qualityFile === `${quality.replace('p', '')}.mp4`) {
+        mp4Url = src.startsWith('//') ? `https:${src}` : src;
+        return false; // break
+      }
+    });
+
+    if (!mp4Url) {
+      // Fallback: try first available source
+      const firstSrc = $('video source').first().attr('src');
+      if (firstSrc) {
+        mp4Url = firstSrc.startsWith('//') ? `https:${firstSrc}` : firstSrc;
+      }
+    }
+
+    if (!mp4Url) {
+      return res.status(404).send('No stream found');
+    }
+
+    // Fetch the MP4 from the CDN (from Vercel's IP — matches the token!)
+    const range = req.headers.range;
+    const fetchHeaders = { 'User-Agent': UA };
+    if (range) {
+      fetchHeaders['Range'] = range;
+    }
+
+    const mp4Res = await fetch(mp4Url, { headers: fetchHeaders });
+
+    if (!mp4Res.ok && mp4Res.status !== 206) {
+      return res.status(mp4Res.status).send(`CDN returned ${mp4Res.status}`);
+    }
+
+    // Pass through content headers
+    const contentType = mp4Res.headers.get('content-type') || 'video/mp4';
+    const contentLength = mp4Res.headers.get('content-length');
+    const contentRange = mp4Res.headers.get('content-range');
+    const acceptRanges = mp4Res.headers.get('accept-ranges');
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Range');
+
+    if (acceptRanges) res.setHeader('Accept-Ranges', acceptRanges);
+    if (contentRange) {
+      res.setHeader('Content-Range', contentRange);
+      res.status(206);
+    }
+    if (contentLength) res.setHeader('Content-Length', contentLength);
+
+    // Pipe the MP4 data back to Stremio
+    mp4Res.body.pipe(res);
+  } catch (err) {
+    console.error('Proxy error:', err.message);
+    res.status(500).send('Proxy error');
+  }
+});
 
 // ─── Routes ────────────────────────────────────────────────
 
@@ -674,7 +742,11 @@ app.get('/meta/:type/:id.json', async (req, res) => {
 app.get('/stream/:type/:id.json', async (req, res) => {
   try {
     const { type, id } = req.params;
-    const result = await handleStream(type, id);
+    // Determine the addon base URL from the request host
+    const proto = req.headers['x-forwarded-proto'] || 'https';
+    const host = req.headers.host;
+    const addonBase = host ? `${proto}://${host}` : ADDON_BASE_DEFAULT;
+    const result = await handleStream(type, id, addonBase);
     res.json(result);
   } catch (err) {
     console.error('Stream error:', err.message);
