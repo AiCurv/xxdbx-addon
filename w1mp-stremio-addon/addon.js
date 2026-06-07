@@ -135,7 +135,7 @@ function extractModelCards(html) {
 
 const manifest = {
     id: "community.w1mp",
-    version: "3.0.0",
+    version: "3.1.0",
     name: "W1MP",
     description: "Browse models, tags, and videos from w1mp.com. Models and tags are channels you can add to your library!",
     logo: "https://www.google.com/s2/favicons?domain=w1mp.com&sz=256",
@@ -659,10 +659,12 @@ builder.defineMetaHandler(async (args) => {
             const poster = $("video").attr("poster") || "";
             let description = $("meta[property='og:description']").attr("content") || "";
 
-            // Extract models (unique, from the video page)
+            // Extract ONLY the video's actual models (from .js-models-list)
+            // DO NOT use $("a[href*='/models/']") — it picks up models from
+            // the "Related Videos" section which shows 20+ random models
             const models = [];
             const modelSeen = new Set();
-            $("a").each((_, el) => {
+            $(".js-models-list a").each((_, el) => {
                 const href = $(el).attr("href") || "";
                 const slugMatch = href.match(/\/models\/([^/]+)\/?$/);
                 if (slugMatch && !modelSeen.has(slugMatch[1])) {
@@ -674,10 +676,12 @@ builder.defineMetaHandler(async (args) => {
                 }
             });
 
-            // Extract tags (unique, from the video page)
+            // Extract ONLY the video's actual tags (from .top-player-items-wrap)
+            // Tags in .top-player-items-wrap are the video's own tags.
+            // Tags in .section-row.related are from related videos — DO NOT USE.
             const tags = [];
             const tagSeen = new Set();
-            $("a").each((_, el) => {
+            $(".top-player-items-wrap a[href*='/tags/']").each((_, el) => {
                 const href = $(el).attr("href") || "";
                 const tagMatch = href.match(/\/tags\/([^/]+)\/?$/);
                 if (tagMatch && !tagSeen.has(tagMatch[1])) {
@@ -800,10 +804,12 @@ builder.defineStreamHandler(async (args) => {
                 if (vHtml) {
                     const v$ = cheerio.load(vHtml);
 
-                    // Extract unique models from the video page
+                    // Extract ONLY the video's actual models from .js-models-list
+                    // CRITICAL: Do NOT use v$("a[href*='/models/']") — it grabs
+                    // 20+ models from the Related Videos section (pollution!)
                     const models = [];
                     const modelSeen = new Set();
-                    v$("a").each((_, el) => {
+                    v$(".js-models-list a").each((_, el) => {
                         const href = v$(el).attr("href") || "";
                         const slugMatch = href.match(/\/models\/([^/]+)\/?$/);
                         if (slugMatch && !modelSeen.has(slugMatch[1])) {
@@ -825,10 +831,12 @@ builder.defineStreamHandler(async (args) => {
                         });
                     }
 
-                    // Extract unique tags from the video page
+                    // Extract ONLY the video's actual tags from .top-player-items-wrap
+                    // Tags in .top-player-items-wrap are the video's own tags.
+                    // Tags in .section-row.related are from other videos — DO NOT USE.
                     const tags = [];
                     const tagSeen = new Set();
-                    v$("a").each((_, el) => {
+                    v$(".top-player-items-wrap a[href*='/tags/']").each((_, el) => {
                         const href = v$(el).attr("href") || "";
                         const tagMatch = href.match(/\/tags\/([^/]+)\/?$/);
                         if (tagMatch && !tagSeen.has(tagMatch[1])) {
@@ -840,7 +848,7 @@ builder.defineStreamHandler(async (args) => {
                         }
                     });
 
-                    // Add first 5 tag navigation streams
+                    // Add tag navigation streams (first 5)
                     for (const tag of tags.slice(0, 5)) {
                         const deepLink = `stremio:///detail/channel/tag_${tag.slug}`;
                         streams.push({
