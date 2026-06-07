@@ -22,3 +22,26 @@ Stage Summary:
 - All channel types work: stars (⭐), channels (🏠), tags (🏷️), dates (📅)
 - Navigation streams with stremio:///detail/channel/ deep links functional
 - Knowledge base updated with critical base64 ID encoding error and fix
+
+---
+Task ID: 1
+Agent: Main
+Task: Build Stremio Site Extractor Firefox Mobile addon
+
+Work Log:
+- Analyzed xxdbx.com site structure thoroughly via subagent research
+- Designed addon architecture: manifest.json (MV2), popup UI, content script, background crawler
+- Built content.js with comprehensive DOM extraction (video sources, cards, pagination, navigation, tags, models, channels, dates, ads, players)
+- Built background.js with smart site-wide crawler engine (URL discovery, pattern detection, page sampling, video source deep-crawl)
+- Built popup.html/css/js with dark theme UI, progress tracking, download button
+- Created addon icons using PIL/Pillow
+- Built XPI package (24KB)
+- Created GitHub repo AiCurv/stremio-site-extractor with release + XPI upload
+- Updated Stremio AI Knowledge Base: added Step 0 to AGENT_GUIDE.md, added site_extractor to agent-index.json
+
+Stage Summary:
+- Firefox Mobile addon built and packaged at /home/z/my-project/download/stremio-site-extractor-1.0.0.xpi
+- GitHub repo: https://github.com/AiCurv/stremio-site-extractor
+- XPI download: https://github.com/AiCurv/stremio-site-extractor/releases/download/v1.0.0/stremio-site-extractor-1.0.0.xpi
+- Knowledge base updated at AiCurv/stremio-ai-knowledge
+- Key features: URL pattern detection with regex, CSS selector extraction, video source analysis (FluidPlayer/JW Player/Video.js), auth token detection, CDN host detection, ad network detection, Stremio addon blueprint generation
