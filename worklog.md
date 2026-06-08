@@ -45,3 +45,28 @@ Stage Summary:
 - XPI download: https://github.com/AiCurv/stremio-site-extractor/releases/download/v1.0.0/stremio-site-extractor-1.0.0.xpi
 - Knowledge base updated at AiCurv/stremio-ai-knowledge
 - Key features: URL pattern detection with regex, CSS selector extraction, video source analysis (FluidPlayer/JW Player/Video.js), auth token detection, CDN host detection, ad network detection, Stremio addon blueprint generation
+
+---
+Task ID: 2
+Agent: Main
+Task: Fix xxdbx-addon search functionality
+
+Work Log:
+- Analyzed the V5.0.0 addon code - found search was broken because:
+  1. Only "Latest" and "Popular" catalogs existed in discover (no search support)
+  2. "Video Search" catalog had isRequired:true which hides it from discover
+  3. Latest and Popular catalogs didn't support the search extra
+- Fixed by making ALL movie-type catalogs support search (isRequired: false)
+- Added "Search" catalog that shows latest by default, returns /search/{query} results when searching
+- Latest and Popular catalogs now also search /search/{query} when a search term is provided
+- Switched ID encoding from base64url to encodeURIComponent (was breaking meta handler)
+- Cleaned up the search catalog to not mix movie/channel types (SDK strips them anyway)
+- Deployed V7.0.0 to https://xxdbx-addon.vercel.app/manifest.json
+- Pushed to GitHub: https://github.com/AiCurv/xxdbx-addon
+
+Stage Summary:
+- Search now works across ALL catalogs (Search, Latest, Popular, Stars, Channels, Tags, Dates)
+- Searching "big ass" returns 36 video results from the site
+- Searching a model name in Stars catalog shows matching stars
+- Proxy play endpoint returns 200 with proper video/mp4 content
+- Star channel pages work with full video listings (e.g., Lacy Lamarr = 148 videos)
