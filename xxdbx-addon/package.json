@@ -1,11 +1,12 @@
 {
   "name": "xxdbx-stremio-addon",
-  "version": "9.1.0",
-  "description": "Stremio addon for xxdbx.com with clickable navigation streams",
+  "version": "10.0.0",
+  "description": "Stremio addon for xxdbx.com - search, browse, navigate stars/channels/tags",
   "main": "api/index.js",
   "dependencies": {
-    "stremio-addon-sdk": "^1.6.10",
     "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
   }
 }
