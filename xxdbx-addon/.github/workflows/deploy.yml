@@ -2,11 +2,16 @@ name: Deploy to Vercel
 on:
   push:
     branches: [main]
+    paths:
+      - 'xxdbx-addon/**'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: xxdbx-addon
     steps:
       - uses: actions/checkout@v4
       - name: Install Vercel CLI
