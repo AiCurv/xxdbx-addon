@@ -36,12 +36,16 @@ function fixUrl(url) {
     return url;
 }
 
-// encodeURIComponent/decodeURIComponent for safe Stremio IDs
+// Stremio-safe ID encoding:
+// Use encodeURIComponent but replace %20 with + (plus sign)
+// Stremio's internal URL handling decodes %20 to spaces which breaks the meta handler.
+// Using + for spaces avoids this issue because + doesn't need URL encoding.
+// Literal + in names gets encoded as %2B by encodeURIComponent, so no ambiguity.
 function enc(str) {
-    return encodeURIComponent(str);
+    return encodeURIComponent(str).replace(/%20/g, "+");
 }
 function dec(encoded) {
-    return decodeURIComponent(encoded);
+    return decodeURIComponent(encoded.replace(/\+/g, "%20"));
 }
 
 // ─── Video Card Parser (listing pages) ─────────────────────────────
@@ -184,7 +188,7 @@ function getAddonBase() {
 
 const manifest = {
     id: "community.xxdbx",
-    version: "7.0.0",
+    version: "7.1.0",
     name: "XXDBX",
     description:
         "Browse stars, channels, tags, dates, and videos from xxdbx.com. Search any term to get video results + navigate to models/channels!",
