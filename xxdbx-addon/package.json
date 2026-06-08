@@ -1,6 +1,6 @@
 {
   "name": "xxdbx-stremio-addon",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Stremio addon for xxdbx.com with clickable navigation streams",
   "main": "api/index.js",
   "dependencies": {

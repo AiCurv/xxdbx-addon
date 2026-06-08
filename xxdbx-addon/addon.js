@@ -36,16 +36,15 @@ function fixUrl(url) {
     return url;
 }
 
-// Stremio-safe ID encoding:
-// Use encodeURIComponent but replace %20 with + (plus sign)
-// Stremio's internal URL handling decodes %20 to spaces which breaks the meta handler.
-// Using + for spaces avoids this issue because + doesn't need URL encoding.
-// Literal + in names gets encoded as %2B by encodeURIComponent, so no ambiguity.
+// Base64url encoding for Stremio IDs — URL-safe, no special chars
+// This is PROVEN to work with Stremio's deep link handling.
+// encodeURIComponent + substitution (+ for %20) caused "No information found"
+// because Stremio's client mishandles + in stremio:/// deep links.
 function enc(str) {
-    return encodeURIComponent(str).replace(/%20/g, "+");
+    return Buffer.from(str, "utf-8").toString("base64url");
 }
 function dec(encoded) {
-    return decodeURIComponent(encoded.replace(/\+/g, "%20"));
+    return Buffer.from(encoded, "base64url").toString("utf-8");
 }
 
 // ─── Video Card Parser (listing pages) ─────────────────────────────
@@ -188,7 +187,7 @@ function getAddonBase() {
 
 const manifest = {
     id: "community.xxdbx",
-    version: "7.1.0",
+    version: "8.0.0",
     name: "XXDBX",
     description:
         "Browse stars, channels, tags, dates, and videos from xxdbx.com. Search any term to get video results + navigate to models/channels!",
@@ -292,19 +291,13 @@ builder.defineCatalogHandler(async (args) => {
     const search = args.extra?.search || "";
 
     try {
-        // ── Search catalog (movie type) — THE MAIN SEARCH ──
-        // When user types anything, fetch /search/{query} from the site
-        // Returns VIDEO results only (Stremio strips mixed types from catalogs)
-        // For model/channel navigation, users can search in Stars/Channels catalogs
+        // ── Search catalog (movie type) ──
         if (args.id === "search" && args.type === "movie") {
             if (!search) {
-                // No search query — show latest videos as default
                 const html = await cachedFetch(`${BASE_URL}/`);
                 const videos = parseVideoCards(html);
                 return { metas: videos.map((v) => videoToMetaPreview(v)) };
             }
-
-            // Search the site for videos
             const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
             const html = await cachedFetch(searchUrl);
             const videos = parseVideoCards(html);
@@ -547,10 +540,9 @@ builder.defineCatalogHandler(async (args) => {
             return { metas };
         }
 
-        // ── Latest Videos catalog (movie type, now supports search too!) ──
+        // ── Latest Videos catalog (movie type) ──
         if (args.id === "latest" && args.type === "movie") {
             if (search) {
-                // Search: redirect to site search
                 const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
                 const html = await cachedFetch(searchUrl);
                 const videos = parseVideoCards(html);
@@ -562,10 +554,9 @@ builder.defineCatalogHandler(async (args) => {
             return { metas: videos.map((v) => videoToMetaPreview(v)) };
         }
 
-        // ── Most Popular catalog (movie type, now supports search too!) ──
+        // ── Most Popular catalog (movie type) ──
         if (args.id === "popular" && args.type === "movie") {
             if (search) {
-                // Search: redirect to site search
                 const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
                 const html = await cachedFetch(searchUrl);
                 const videos = parseVideoCards(html);
@@ -646,22 +637,38 @@ builder.defineMetaHandler(async (args) => {
         }
 
         // ── Star meta (channel type) ──
+        // KEY INSIGHT: On xxdbx.com, /stars/{name}/ works as a search-like page
+        // But for reliability, we use /search/{name} as the primary source
+        // and fall back to /stars/{name}/ if it exists
         if (type === "channel" && id.startsWith("star_")) {
             const name = dec(id.replace("star_", ""));
-            const baseUrl = `${BASE_URL}/stars/${encodeURIComponent(name)}`;
+            // Try the dedicated stars page first, fall back to search
+            let baseUrl = `${BASE_URL}/stars/${encodeURIComponent(name)}`;
+            try {
+                await cachedFetch(baseUrl);
+            } catch (e) {
+                // Stars page doesn't exist, use search instead
+                baseUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
+            }
             return await buildChannelMeta(id, name, baseUrl, "Star", "poster");
         }
 
         // ── Channel meta (channel type) ──
         if (type === "channel" && id.startsWith("ch_")) {
             const name = dec(id.replace("ch_", ""));
-            const baseUrl = `${BASE_URL}/channels/${encodeURIComponent(name)}`;
+            let baseUrl = `${BASE_URL}/channels/${encodeURIComponent(name)}`;
+            try {
+                await cachedFetch(baseUrl);
+            } catch (e) {
+                baseUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
+            }
             return await buildChannelMeta(id, name, baseUrl, "Channel", "landscape");
         }
 
         // ── Tag meta (channel type) ──
         if (type === "channel" && id.startsWith("tag_")) {
             const name = dec(id.replace("tag_", ""));
+            // Tags always use search on xxdbx.com
             const baseUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
             return await buildChannelMeta(id, name, baseUrl, "Tag", "poster");
         }
@@ -669,7 +676,12 @@ builder.defineMetaHandler(async (args) => {
         // ── Date meta (channel type) ──
         if (type === "channel" && id.startsWith("date_")) {
             const dateStr = dec(id.replace("date_", ""));
-            const baseUrl = `${BASE_URL}/dates/${encodeURIComponent(dateStr)}`;
+            let baseUrl = `${BASE_URL}/dates/${encodeURIComponent(dateStr)}`;
+            try {
+                await cachedFetch(baseUrl);
+            } catch (e) {
+                baseUrl = `${BASE_URL}/search/${encodeURIComponent(dateStr)}`;
+            }
             return await buildChannelMeta(id, dateStr, baseUrl, "Date", "poster");
         }
     } catch (err) {
