@@ -70,3 +70,25 @@ Stage Summary:
 - Searching a model name in Stars catalog shows matching stars
 - Proxy play endpoint returns 200 with proper video/mp4 content
 - Star channel pages work with full video listings (e.g., Lacy Lamarr = 148 videos)
+
+---
+Task ID: 3
+Agent: Main
+Task: Fix xxdbx-addon channel navigation (stars/channels/tags broken)
+
+Work Log:
+- Diagnosed issue: V7.0.0 used encodeURIComponent() for IDs which produces %20 for spaces
+- Stremio's internal URL handling decodes %20 to literal spaces in deep links
+- When Stremio processes stremio:///detail/channel/star_Lacy%20Lamarr, it decodes %20 to space
+- The space then breaks the HTTP request path (/meta/channel/star_Lacy Lamarr.json → parse error)
+- Tags without spaces (MILF, Gonzo) worked, tags with spaces (All Sex) and all stars/channels failed
+- Fix: Replace %20 with + (plus sign) in encoded IDs - + doesn't need URL encoding and survives Stremio's URL handling
+- Literal + in names is encoded as %2B by encodeURIComponent, so no ambiguity
+- Deployed V7.1.0 to https://xxdbx-addon.vercel.app/manifest.json
+- Updated ERRORS_DB.md with Error #18 documenting this issue
+- Updated agent-index.json id_encoding section and errors_quick
+
+Stage Summary:
+- Channel navigation (stars, channels, tags) now uses + for spaces instead of %20
+- All meta endpoints verified working: star_Lacy+Lamarr → 148 videos, ch_Shame4K.com → 174 videos
+- Knowledge base updated with new error pattern
