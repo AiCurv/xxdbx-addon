@@ -194,7 +194,7 @@ function getAddonBase() {
 
 const manifest = {
     id: "community.xxdbx",
-    version: "9.0.0",
+    version: "9.1.0",
     name: "XXDBX",
     description:
         "Browse stars, channels, tags, dates, and videos from xxdbx.com. Search any term to get video results + navigate to models/channels!",
@@ -208,7 +208,7 @@ const manifest = {
         },
         {
             name: "stream",
-            types: ["movie"],
+            types: ["movie", "channel"],
             idPrefixes: ["video_"],
         },
     ],
@@ -772,7 +772,17 @@ builder.defineStreamHandler(async (args) => {
     const { id, type } = args;
 
     try {
-        if (type === "movie" && id.startsWith("video_")) {
+        // ═══════════════════════════════════════════════════════════
+        // V9.1.0 FIX: Stream handler supports BOTH movie AND channel type!
+        //
+        // When a video is inside a channel page, Stremio requests streams
+        // with type="channel", NOT type="movie". Our old handler only
+        // handled type="movie", so channel page videos had NO streams.
+        //
+        // Now we handle BOTH types for video_ prefix IDs.
+        // ═══════════════════════════════════════════════════════════
+
+        if ((type === "movie" || type === "channel") && id.startsWith("video_")) {
             const videoId = id.replace("video_", "");
             const addonBase = getAddonBase();
             const streams = [];
@@ -794,51 +804,54 @@ builder.defineStreamHandler(async (args) => {
                 });
             }
 
-            // ── 2. Clickable navigation streams ──
-            // V9: Using hex-encoded IDs (case-insensitive, Stremio-safe)
-            try {
-                const detailUrl = `${BASE_URL}/view/${videoId}`;
-                const html = await cachedFetch(detailUrl);
-                const detail = extractVideoDetail(html);
+            // ── 2. Clickable navigation streams (only for movie type, not inside channels) ──
+            // Don't add navigation streams when the video is being viewed inside
+            // a channel page — it would be confusing and recursive
+            if (type === "movie") {
+                try {
+                    const detailUrl = `${BASE_URL}/view/${videoId}`;
+                    const html = await cachedFetch(detailUrl);
+                    const detail = extractVideoDetail(html);
 
-                // Add clickable star streams
-                for (const star of detail.stars.slice(0, 10)) {
-                    streams.push({
-                        name: "\u2b50 Star",
-                        title: star.name,
-                        externalUrl: `stremio:///detail/channel/star_${enc(star.name)}`,
-                        behaviorHints: { group: "stars" },
-                    });
+                    // Add clickable star streams
+                    for (const star of detail.stars.slice(0, 10)) {
+                        streams.push({
+                            name: "\u2b50 Star",
+                            title: star.name,
+                            externalUrl: `stremio:///detail/channel/star_${enc(star.name)}`,
+                            behaviorHints: { group: "stars" },
+                        });
+                    }
+
+                    // Add clickable channel streams
+                    for (const ch of detail.channels.slice(0, 5)) {
+                        streams.push({
+                            name: "\ud83c\udfe0 Channel",
+                            title: ch.name,
+                            externalUrl: `stremio:///detail/channel/ch_${enc(ch.name)}`,
+                            behaviorHints: { group: "channels" },
+                        });
+                    }
+
+                    // Add clickable tag streams
+                    for (const tag of detail.tags.slice(0, 10)) {
+                        streams.push({
+                            name: "\ud83c\udff7\ufe0f Tag",
+                            title: tag.name,
+                            externalUrl: `stremio:///detail/channel/tag_${enc(tag.name)}`,
+                            behaviorHints: { group: "tags" },
+                        });
+                    }
+
+                } catch (err) {
+                    console.error("Stream nav error:", err.message);
                 }
-
-                // Add clickable channel streams
-                for (const ch of detail.channels.slice(0, 5)) {
-                    streams.push({
-                        name: "\ud83c\udfe0 Channel",
-                        title: ch.name,
-                        externalUrl: `stremio:///detail/channel/ch_${enc(ch.name)}`,
-                        behaviorHints: { group: "channels" },
-                    });
-                }
-
-                // Add clickable tag streams
-                for (const tag of detail.tags.slice(0, 10)) {
-                    streams.push({
-                        name: "\ud83c\udff7\ufe0f Tag",
-                        title: tag.name,
-                        externalUrl: `stremio:///detail/channel/tag_${enc(tag.name)}`,
-                        behaviorHints: { group: "tags" },
-                    });
-                }
-
-            } catch (err) {
-                console.error("Stream nav error:", err.message);
             }
 
             return { streams };
         }
 
-        // Channel types don't have streams
+        // Star/channel/tag/date IDs don't have streams themselves
         if (
             id.startsWith("star_") ||
             id.startsWith("ch_") ||
