@@ -1,6 +1,6 @@
 {
   "name": "xxdbx-stremio-addon",
-  "version": "10.0.0",
+  "version": "11.0.0",
   "description": "Stremio addon for xxdbx.com - search, browse, navigate stars/channels/tags",
   "main": "api/index.js",
   "dependencies": {
