@@ -36,15 +36,22 @@ function fixUrl(url) {
     return url;
 }
 
-// Base64url encoding for Stremio IDs — URL-safe, no special chars
-// This is PROVEN to work with Stremio's deep link handling.
-// encodeURIComponent + substitution (+ for %20) caused "No information found"
-// because Stremio's client mishandles + in stremio:/// deep links.
+// ═══════════════════════════════════════════════════════════════════
+// V9.0.0: HEX ENCODING — the fix for "No information found" bug!
+//
+// Root cause: Stremio's client lowercases IDs in stremio:/// deep links.
+// base64url is case-sensitive (A vs a = different bytes), so when Stremio
+// lowercased "star_YWxsc2V4" → "star_ywxsc2v4", decoding produced garbage.
+//
+// Hex encoding only uses 0-9 and a-f — all lowercase, case-insensitive.
+// Even if Stremio lowercases the ID, hex decoding still works perfectly.
+// ═══════════════════════════════════════════════════════════════════
+
 function enc(str) {
-    return Buffer.from(str, "utf-8").toString("base64url");
+    return Buffer.from(str, "utf-8").toString("hex");
 }
 function dec(encoded) {
-    return Buffer.from(encoded, "base64url").toString("utf-8");
+    return Buffer.from(encoded, "hex").toString("utf-8");
 }
 
 // ─── Video Card Parser (listing pages) ─────────────────────────────
@@ -187,7 +194,7 @@ function getAddonBase() {
 
 const manifest = {
     id: "community.xxdbx",
-    version: "8.0.0",
+    version: "9.0.0",
     name: "XXDBX",
     description:
         "Browse stars, channels, tags, dates, and videos from xxdbx.com. Search any term to get video results + navigate to models/channels!",
@@ -307,27 +314,12 @@ builder.defineCatalogHandler(async (args) => {
         // ── Stars catalog (channel type, searchable + browseable) ──
         if (args.id === "stars" && args.type === "channel") {
             if (search) {
+                // KEY INSIGHT: xxdbx.com stars don't have dedicated pages!
+                // They just search. So we search for the star name and extract
+                // star names from the results.
                 const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
                 const html = await cachedFetch(searchUrl);
                 const tagData = extractTagsFromCards(html);
-
-                // Also try the direct star page
-                try {
-                    const starUrl = `${BASE_URL}/stars/${encodeURIComponent(search)}`;
-                    const starHtml = await cachedFetch(starUrl);
-                    const s$ = cheerio.load(starHtml);
-                    const pageTitle = s$("article h1").first().text().trim();
-                    if (pageTitle) {
-                        const starName = pageTitle.split("\u2013")[0].trim() || search;
-                        if (!tagData.stars.find((s) => s.name.toLowerCase() === starName.toLowerCase())) {
-                            tagData.stars.unshift({ name: starName, slug: encodeURIComponent(search) });
-                        }
-                    }
-                    const moreTags = extractTagsFromCards(starHtml);
-                    for (const s of moreTags.stars) {
-                        if (!tagData.stars.find((e) => e.name === s.name)) tagData.stars.push(s);
-                    }
-                } catch (e) {}
 
                 const metas = tagData.stars.map((s) => ({
                     id: `star_${enc(s.name)}`,
@@ -337,6 +329,18 @@ builder.defineCatalogHandler(async (args) => {
                     posterShape: "poster",
                     description: `Browse ${s.name} on XXDBX`,
                 }));
+
+                // Add the search term itself as a star if not already listed
+                if (!metas.find((m) => m.name.toLowerCase() === search.toLowerCase())) {
+                    metas.unshift({
+                        id: `star_${enc(search)}`,
+                        type: "channel",
+                        name: search,
+                        poster: "",
+                        posterShape: "poster",
+                        description: `Search results for "${search}" on XXDBX`,
+                    });
+                }
 
                 const q = search.toLowerCase();
                 metas.sort((a, b) =>
@@ -383,19 +387,6 @@ builder.defineCatalogHandler(async (args) => {
                 const html = await cachedFetch(searchUrl);
                 const tagData = extractTagsFromCards(html);
 
-                try {
-                    const chUrl = `${BASE_URL}/channels/${encodeURIComponent(search)}`;
-                    const chHtml = await cachedFetch(chUrl);
-                    const c$ = cheerio.load(chHtml);
-                    const pageTitle = c$("article h1").first().text().trim();
-                    if (pageTitle) {
-                        const chName = pageTitle.split("\u2013")[0].trim() || search;
-                        if (!tagData.channels.find((c) => c.name.toLowerCase() === chName.toLowerCase())) {
-                            tagData.channels.unshift({ name: chName, slug: encodeURIComponent(search) });
-                        }
-                    }
-                } catch (e) {}
-
                 const metas = tagData.channels.map((c) => ({
                     id: `ch_${enc(c.name)}`,
                     type: "channel",
@@ -404,6 +395,17 @@ builder.defineCatalogHandler(async (args) => {
                     posterShape: "landscape",
                     description: `Browse ${c.name} on XXDBX`,
                 }));
+
+                if (!metas.find((m) => m.name.toLowerCase() === search.toLowerCase())) {
+                    metas.unshift({
+                        id: `ch_${enc(search)}`,
+                        type: "channel",
+                        name: search,
+                        poster: "",
+                        posterShape: "landscape",
+                        description: `Search results for "${search}" on XXDBX`,
+                    });
+                }
 
                 const q = search.toLowerCase();
                 metas.sort((a, b) =>
@@ -504,12 +506,11 @@ builder.defineCatalogHandler(async (args) => {
         // ── Dates catalog (channel type) ──
         if (args.id === "dates" && args.type === "channel") {
             if (search) {
-                const searchUrl = `${BASE_URL}/dates/${encodeURIComponent(search)}`;
+                // Dates on xxdbx.com also just search
+                const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
                 try {
                     const html = await cachedFetch(searchUrl);
-                    const $ = cheerio.load(html);
-                    const pageTitle = $("article h1").first().text().trim();
-                    const videoCount = pageTitle.match(/(\d+)\s*videos/);
+                    const videoCount = parseVideoCards(html).length;
                     return {
                         metas: [{
                             id: `date_${enc(search)}`,
@@ -517,7 +518,7 @@ builder.defineCatalogHandler(async (args) => {
                             name: search,
                             poster: "",
                             posterShape: "poster",
-                            description: videoCount ? `${videoCount[1]} videos` : `Browse ${search} on XXDBX`,
+                            description: videoCount ? `${videoCount} videos found` : `Browse ${search} on XXDBX`,
                         }],
                     };
                 } catch (e) {
@@ -636,53 +637,57 @@ builder.defineMetaHandler(async (args) => {
             return { meta };
         }
 
+        // ═══════════════════════════════════════════════════════════
+        // V9.0.0 FIX: Channel meta handlers
+        //
+        // KEY INSIGHT: xxdbx.com does NOT have dedicated pages for
+        // stars, channels, or tags. When you click them on the site,
+        // they all just search. So we ALWAYS use /search/{name}.
+        //
+        // Previous code tried /stars/{name}/ first, which either
+        // 404'd or returned a different page structure, causing
+        // "No information found" errors.
+        // ═══════════════════════════════════════════════════════════
+
         // ── Star meta (channel type) ──
-        // KEY INSIGHT: On xxdbx.com, /stars/{name}/ works as a search-like page
-        // But for reliability, we use /search/{name} as the primary source
-        // and fall back to /stars/{name}/ if it exists
         if (type === "channel" && id.startsWith("star_")) {
             const name = dec(id.replace("star_", ""));
-            // Try the dedicated stars page first, fall back to search
-            let baseUrl = `${BASE_URL}/stars/${encodeURIComponent(name)}`;
-            try {
-                await cachedFetch(baseUrl);
-            } catch (e) {
-                // Stars page doesn't exist, use search instead
-                baseUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
-            }
-            return await buildChannelMeta(id, name, baseUrl, "Star", "poster");
+            console.log(`[META] star_ decoded name: "${name}" from id: "${id}"`);
+            // Always use search — xxdbx.com stars don't have dedicated pages
+            const searchUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
+            return await buildChannelMeta(id, name, searchUrl, "Star", "poster");
         }
 
         // ── Channel meta (channel type) ──
         if (type === "channel" && id.startsWith("ch_")) {
             const name = dec(id.replace("ch_", ""));
-            let baseUrl = `${BASE_URL}/channels/${encodeURIComponent(name)}`;
-            try {
-                await cachedFetch(baseUrl);
-            } catch (e) {
-                baseUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
-            }
-            return await buildChannelMeta(id, name, baseUrl, "Channel", "landscape");
+            console.log(`[META] ch_ decoded name: "${name}" from id: "${id}"`);
+            // Always use search — xxdbx.com channels don't have dedicated pages
+            const searchUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
+            return await buildChannelMeta(id, name, searchUrl, "Channel", "landscape");
         }
 
         // ── Tag meta (channel type) ──
         if (type === "channel" && id.startsWith("tag_")) {
             const name = dec(id.replace("tag_", ""));
+            console.log(`[META] tag_ decoded name: "${name}" from id: "${id}"`);
             // Tags always use search on xxdbx.com
-            const baseUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
-            return await buildChannelMeta(id, name, baseUrl, "Tag", "poster");
+            const searchUrl = `${BASE_URL}/search/${encodeURIComponent(name)}`;
+            return await buildChannelMeta(id, name, searchUrl, "Tag", "poster");
         }
 
         // ── Date meta (channel type) ──
         if (type === "channel" && id.startsWith("date_")) {
             const dateStr = dec(id.replace("date_", ""));
-            let baseUrl = `${BASE_URL}/dates/${encodeURIComponent(dateStr)}`;
+            console.log(`[META] date_ decoded name: "${dateStr}" from id: "${id}"`);
+            // Try /dates/ first, fall back to search
+            let searchUrl = `${BASE_URL}/dates/${encodeURIComponent(dateStr)}`;
             try {
-                await cachedFetch(baseUrl);
+                await cachedFetch(searchUrl);
             } catch (e) {
-                baseUrl = `${BASE_URL}/search/${encodeURIComponent(dateStr)}`;
+                searchUrl = `${BASE_URL}/search/${encodeURIComponent(dateStr)}`;
             }
-            return await buildChannelMeta(id, dateStr, baseUrl, "Date", "poster");
+            return await buildChannelMeta(id, dateStr, searchUrl, "Date", "poster");
         }
     } catch (err) {
         console.error("Meta error:", err.message);
@@ -693,54 +698,72 @@ builder.defineMetaHandler(async (args) => {
 
 // ─── Helper: Build channel meta with videos ────────────────────────
 
-async function buildChannelMeta(id, displayName, baseUrl, genre, posterShape) {
-    const html = await cachedFetch(baseUrl);
-    const $ = cheerio.load(html);
-    const pageTitle = $("article h1").first().text().trim();
-    const name = pageTitle.split("\u2013")[0].trim() || displayName;
+async function buildChannelMeta(id, displayName, searchUrl, genre, posterShape) {
+    try {
+        const html = await cachedFetch(searchUrl);
+        const $ = cheerio.load(html);
+        const pageTitle = $("article h1").first().text().trim();
+        const name = pageTitle.split("\u2013")[0].trim() || displayName;
 
-    // Extract videos from multiple pages
-    const videos = [];
-    const seenIds = new Set();
-    const maxPages = genre === "Star" || genre === "Channel" ? 5 : 3;
+        // Extract videos from the search results
+        const videos = [];
+        const seenIds = new Set();
+        const maxPages = 3;
 
-    for (let p = 1; p <= maxPages; p++) {
-        try {
-            const pUrl = p > 1 ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}page=${p}` : baseUrl;
-            const pHtml = await cachedFetch(pUrl);
-            const pVideos = parseVideoCards(pHtml);
-            if (pVideos.length === 0) break;
+        for (let p = 1; p <= maxPages; p++) {
+            try {
+                const pUrl = p > 1 ? `${searchUrl}${searchUrl.includes("?") ? "&" : "?"}page=${p}` : searchUrl;
+                const pHtml = await cachedFetch(pUrl);
+                const pVideos = parseVideoCards(pHtml);
+                if (pVideos.length === 0) break;
 
-            for (const v of pVideos) {
-                if (!seenIds.has(v.videoId)) {
-                    seenIds.add(v.videoId);
-                    videos.push({
-                        id: `video_${v.videoId}`,
-                        title: v.title,
-                        released: new Date().toISOString().split("T")[0],
-                        thumbnail: v.poster,
-                        overview: v.duration || "",
-                    });
+                for (const v of pVideos) {
+                    if (!seenIds.has(v.videoId)) {
+                        seenIds.add(v.videoId);
+                        videos.push({
+                            id: `video_${v.videoId}`,
+                            title: v.title,
+                            released: new Date().toISOString().split("T")[0],
+                            thumbnail: v.poster,
+                            overview: v.duration || "",
+                        });
+                    }
                 }
+            } catch (e) {
+                break;
             }
-        } catch (e) {
-            break;
         }
+
+        const meta = {
+            id: id,
+            type: "channel",
+            name: name,
+            poster: "",
+            posterShape: posterShape,
+            description: pageTitle || `Browse ${displayName} on XXDBX \u2014 ${videos.length} videos`,
+            genres: [genre],
+            videos: videos,
+            links: [],
+        };
+
+        return { meta };
+    } catch (err) {
+        console.error(`buildChannelMeta error for ${id}:`, err.message);
+        // Return a basic meta even on error so Stremio doesn't show "No information found"
+        return {
+            meta: {
+                id: id,
+                type: "channel",
+                name: displayName,
+                poster: "",
+                posterShape: posterShape,
+                description: `Search results for "${displayName}" on XXDBX`,
+                genres: [genre],
+                videos: [],
+                links: [],
+            },
+        };
     }
-
-    const meta = {
-        id: id,
-        type: "channel",
-        name: name,
-        poster: "",
-        posterShape: posterShape,
-        description: pageTitle || `Browse ${name} on XXDBX \u2014 ${videos.length} videos`,
-        genres: [genre],
-        videos: videos,
-        links: [],
-    };
-
-    return { meta };
 }
 
 // ─── STREAM HANDLER ─────────────────────────────────────────────────
@@ -772,6 +795,7 @@ builder.defineStreamHandler(async (args) => {
             }
 
             // ── 2. Clickable navigation streams ──
+            // V9: Using hex-encoded IDs (case-insensitive, Stremio-safe)
             try {
                 const detailUrl = `${BASE_URL}/view/${videoId}`;
                 const html = await cachedFetch(detailUrl);

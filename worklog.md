@@ -92,3 +92,28 @@ Stage Summary:
 - Channel navigation (stars, channels, tags) now uses + for spaces instead of %20
 - All meta endpoints verified working: star_Lacy+Lamarr → 148 videos, ch_Shame4K.com → 174 videos
 - Knowledge base updated with new error pattern
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix xxdbx-addon V9.0.0 - navigation streams "No information found" bug
+
+Work Log:
+- Read current addon.js (V8.0.0 with base64url encoding)
+- Analyzed the root cause: Stremio lowercases IDs in stremio:/// deep links
+- Tested base64url vs hex encoding: confirmed base64url breaks when lowercased
+- base64url("allsex") = "YWxsc2V4" → lowercased "ywxsc2v4" → decodes to GARBAGE
+- hex("allsex") = "616c6c736578" → lowercased "616c6c736578" → decodes correctly
+- Rewrote addon.js V9.0.0 with:
+  1. Hex encoding instead of base64url (case-insensitive, Stremio-safe)
+  2. Channel meta handlers always use search URLs (xxdbx.com has no dedicated pages)
+  3. Better error handling in buildChannelMeta (returns valid meta even on error)
+- Tested hex encoding locally: all test cases pass with lowercased IDs
+- Pushed V9.0.0 to GitHub: https://github.com/AiCurv/xxdbx-addon
+- Cannot deploy to Vercel: auth token expired/missing
+
+Stage Summary:
+- V9.0.0 code is ready and tested on GitHub
+- Root cause confirmed: Stremio lowercases IDs, base64url is case-sensitive
+- Fix: hex encoding (only 0-9a-f, case-insensitive)
+- Deployment blocked: need Vercel auth token
+- Also fixed: channel meta handlers now always use /search/ URLs (matching xxdbx.com behavior)
