@@ -36,12 +36,12 @@ function fixUrl(url) {
     return url;
 }
 
-// Base64url encoding for safe Stremio IDs
+// encodeURIComponent/decodeURIComponent for safe Stremio IDs
 function enc(str) {
-    return Buffer.from(str, "utf-8").toString("base64url");
+    return encodeURIComponent(str);
 }
-function dec(b64) {
-    return Buffer.from(b64, "base64url").toString("utf-8");
+function dec(encoded) {
+    return decodeURIComponent(encoded);
 }
 
 // ─── Video Card Parser (listing pages) ─────────────────────────────
@@ -52,7 +52,6 @@ function parseVideoCards(html) {
 
     $("div.v").each((_, el) => {
         const $el = $(el);
-        // FIXED: correct CSS selector for video links
         const linkEl = $el.find('a[href^="/view/"]').first();
         const href = linkEl.attr("href") || "";
         const videoMatch = href.match(/\/view\/(\d+)/);
@@ -138,9 +137,7 @@ function extractVideoDetail(html) {
         }
     });
 
-    // Stars, channels, tags, dates from the .tags section
-    // CRITICAL: Only scrape div.tags — this contains ONLY the video's actual metadata
-    // NOT related/suggested content (which would be in div.vids)
+    // Stars, channels, tags, dates from the .tags section only
     const stars = [];
     const channels = [];
     const tags = [];
@@ -180,7 +177,6 @@ function videoToMetaPreview(v) {
 // ─── Get addon base URL for stream proxy ────────────────────────────
 
 function getAddonBase() {
-    // Use the clean public URL, not the internal Vercel URL
     return "https://xxdbx-addon.vercel.app";
 }
 
@@ -188,10 +184,10 @@ function getAddonBase() {
 
 const manifest = {
     id: "community.xxdbx",
-    version: "5.0.0",
+    version: "7.0.0",
     name: "XXDBX",
     description:
-        "Browse stars, channels, tags, dates, and videos from xxdbx.com. Click stars/channels/tags in streams to navigate!",
+        "Browse stars, channels, tags, dates, and videos from xxdbx.com. Search any term to get video results + navigate to models/channels!",
     logo: "https://www.google.com/s2/favicons?domain=xxdbx.com&sz=256",
     resources: [
         "catalog",
@@ -208,6 +204,36 @@ const manifest = {
     ],
     types: ["channel", "movie"],
     catalogs: [
+        // ── MOVIE TYPE: Search ──
+        {
+            type: "movie",
+            id: "search",
+            name: "Search",
+            extra: [
+                { name: "search", isRequired: false },
+                { name: "skip", isRequired: false },
+            ],
+        },
+        // ── MOVIE TYPE: Latest Videos (also supports search!) ──
+        {
+            type: "movie",
+            id: "latest",
+            name: "Latest",
+            extra: [
+                { name: "search", isRequired: false },
+                { name: "skip", isRequired: false },
+            ],
+        },
+        // ── MOVIE TYPE: Most Popular (also supports search!) ──
+        {
+            type: "movie",
+            id: "popular",
+            name: "Popular",
+            extra: [
+                { name: "search", isRequired: false },
+                { name: "skip", isRequired: false },
+            ],
+        },
         // ── CHANNEL TYPE: Stars (browseable + searchable) ──
         {
             type: "channel",
@@ -228,7 +254,7 @@ const manifest = {
                 { name: "skip", isRequired: false },
             ],
         },
-        // ── CHANNEL TYPE: Tags (searchable) ──
+        // ── CHANNEL TYPE: Tags ──
         {
             type: "channel",
             id: "tags",
@@ -241,27 +267,6 @@ const manifest = {
             id: "dates",
             name: "Dates",
             extra: [{ name: "search", isRequired: false }],
-        },
-        // ── MOVIE TYPE: Video Search ──
-        {
-            type: "movie",
-            id: "video_search",
-            name: "Video Search",
-            extra: [{ name: "search", isRequired: true }],
-        },
-        // ── MOVIE TYPE: Latest Videos ──
-        {
-            type: "movie",
-            id: "latest",
-            name: "Latest Videos",
-            extra: [{ name: "skip", isRequired: false }],
-        },
-        // ── MOVIE TYPE: Most Popular ──
-        {
-            type: "movie",
-            id: "popular",
-            name: "Most Popular",
-            extra: [{ name: "skip", isRequired: false }],
         },
     ],
     idPrefixes: ["video_", "star_", "ch_", "tag_", "date_"],
@@ -283,10 +288,28 @@ builder.defineCatalogHandler(async (args) => {
     const search = args.extra?.search || "";
 
     try {
+        // ── Search catalog (movie type) — THE MAIN SEARCH ──
+        // When user types anything, fetch /search/{query} from the site
+        // Returns VIDEO results only (Stremio strips mixed types from catalogs)
+        // For model/channel navigation, users can search in Stars/Channels catalogs
+        if (args.id === "search" && args.type === "movie") {
+            if (!search) {
+                // No search query — show latest videos as default
+                const html = await cachedFetch(`${BASE_URL}/`);
+                const videos = parseVideoCards(html);
+                return { metas: videos.map((v) => videoToMetaPreview(v)) };
+            }
+
+            // Search the site for videos
+            const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
+            const html = await cachedFetch(searchUrl);
+            const videos = parseVideoCards(html);
+            return { metas: videos.map((v) => videoToMetaPreview(v)) };
+        }
+
         // ── Stars catalog (channel type, searchable + browseable) ──
         if (args.id === "stars" && args.type === "channel") {
             if (search) {
-                // Search: fetch the search page and also try direct star page
                 const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
                 const html = await cachedFetch(searchUrl);
                 const tagData = extractTagsFromCards(html);
@@ -299,21 +322,13 @@ builder.defineCatalogHandler(async (args) => {
                     const pageTitle = s$("article h1").first().text().trim();
                     if (pageTitle) {
                         const starName = pageTitle.split("\u2013")[0].trim() || search;
-                        if (
-                            !tagData.stars.find(
-                                (s) => s.name.toLowerCase() === starName.toLowerCase()
-                            )
-                        ) {
-                            tagData.stars.unshift({
-                                name: starName,
-                                slug: encodeURIComponent(search),
-                            });
+                        if (!tagData.stars.find((s) => s.name.toLowerCase() === starName.toLowerCase())) {
+                            tagData.stars.unshift({ name: starName, slug: encodeURIComponent(search) });
                         }
                     }
                     const moreTags = extractTagsFromCards(starHtml);
                     for (const s of moreTags.stars) {
-                        if (!tagData.stars.find((e) => e.name === s.name))
-                            tagData.stars.push(s);
+                        if (!tagData.stars.find((e) => e.name === s.name)) tagData.stars.push(s);
                     }
                 } catch (e) {}
 
@@ -326,12 +341,10 @@ builder.defineCatalogHandler(async (args) => {
                     description: `Browse ${s.name} on XXDBX`,
                 }));
 
-                // Sort: exact/near matches first
                 const q = search.toLowerCase();
-                metas.sort(
-                    (a, b) =>
-                        (a.name.toLowerCase().includes(q) ? 0 : 1) -
-                        (b.name.toLowerCase().includes(q) ? 0 : 1)
+                metas.sort((a, b) =>
+                    (a.name.toLowerCase().includes(q) ? 0 : 1) -
+                    (b.name.toLowerCase().includes(q) ? 0 : 1)
                 );
                 return { metas };
             } else {
@@ -380,21 +393,9 @@ builder.defineCatalogHandler(async (args) => {
                     const pageTitle = c$("article h1").first().text().trim();
                     if (pageTitle) {
                         const chName = pageTitle.split("\u2013")[0].trim() || search;
-                        if (
-                            !tagData.channels.find(
-                                (c) => c.name.toLowerCase() === chName.toLowerCase()
-                            )
-                        ) {
-                            tagData.channels.unshift({
-                                name: chName,
-                                slug: encodeURIComponent(search),
-                            });
+                        if (!tagData.channels.find((c) => c.name.toLowerCase() === chName.toLowerCase())) {
+                            tagData.channels.unshift({ name: chName, slug: encodeURIComponent(search) });
                         }
-                    }
-                    const moreTags = extractTagsFromCards(chHtml);
-                    for (const c of moreTags.channels) {
-                        if (!tagData.channels.find((e) => e.name === c.name))
-                            tagData.channels.push(c);
                     }
                 } catch (e) {}
 
@@ -408,10 +409,9 @@ builder.defineCatalogHandler(async (args) => {
                 }));
 
                 const q = search.toLowerCase();
-                metas.sort(
-                    (a, b) =>
-                        (a.name.toLowerCase().includes(q) ? 0 : 1) -
-                        (b.name.toLowerCase().includes(q) ? 0 : 1)
+                metas.sort((a, b) =>
+                    (a.name.toLowerCase().includes(q) ? 0 : 1) -
+                    (b.name.toLowerCase().includes(q) ? 0 : 1)
                 );
                 return { metas };
             } else {
@@ -470,27 +470,21 @@ builder.defineCatalogHandler(async (args) => {
                     } catch (e) {}
                 }
 
-                // Also add the search term itself as a tag
+                // Add the search term itself as a tag
                 const pageTitle = $("article h1").first().text().trim();
                 const videoCount = pageTitle.match(/(\d+)\s*videos/);
-                if (
-                    !tagMetas.find(
-                        (t) => t.name.toLowerCase() === search.toLowerCase()
-                    )
-                ) {
+                if (!tagMetas.find((t) => t.name.toLowerCase() === search.toLowerCase())) {
                     tagMetas.unshift({
                         id: `tag_${enc(search)}`,
                         type: "channel",
                         name: search,
                         poster: "",
                         posterShape: "poster",
-                        description: videoCount
-                            ? `${videoCount[1]} videos`
-                            : `Browse "${search}" on XXDBX`,
+                        description: videoCount ? `${videoCount[1]} videos` : `Browse "${search}" on XXDBX`,
                     });
                 }
 
-                // Also add tags from listing cards
+                // Add tags from listing cards
                 const cardTags = extractTagsFromCards(html);
                 for (const t of cardTags.tags) {
                     if (!tagMetas.find((m) => m.name.toLowerCase() === t.name.toLowerCase())) {
@@ -510,26 +504,28 @@ builder.defineCatalogHandler(async (args) => {
             return { metas: [] };
         }
 
-        // ── Dates catalog (channel type, search only) ──
+        // ── Dates catalog (channel type) ──
         if (args.id === "dates" && args.type === "channel") {
             if (search) {
                 const searchUrl = `${BASE_URL}/dates/${encodeURIComponent(search)}`;
-                const html = await cachedFetch(searchUrl);
-                const $ = cheerio.load(html);
-                const pageTitle = $("article h1").first().text().trim();
-                const videoCount = pageTitle.match(/(\d+)\s*videos/);
-                return {
-                    metas: [{
-                        id: `date_${enc(search)}`,
-                        type: "channel",
-                        name: search,
-                        poster: "",
-                        posterShape: "poster",
-                        description: videoCount
-                            ? `${videoCount[1]} videos`
-                            : `Browse ${search} on XXDBX`,
-                    }],
-                };
+                try {
+                    const html = await cachedFetch(searchUrl);
+                    const $ = cheerio.load(html);
+                    const pageTitle = $("article h1").first().text().trim();
+                    const videoCount = pageTitle.match(/(\d+)\s*videos/);
+                    return {
+                        metas: [{
+                            id: `date_${enc(search)}`,
+                            type: "channel",
+                            name: search,
+                            poster: "",
+                            posterShape: "poster",
+                            description: videoCount ? `${videoCount[1]} videos` : `Browse ${search} on XXDBX`,
+                        }],
+                    };
+                } catch (e) {
+                    return { metas: [] };
+                }
             }
             // Default: show recent years
             const currentYear = new Date().getFullYear();
@@ -547,34 +543,31 @@ builder.defineCatalogHandler(async (args) => {
             return { metas };
         }
 
-        // ── Video Search catalog (movie type, search-only) ──
-        if (args.id === "video_search" && args.type === "movie") {
+        // ── Latest Videos catalog (movie type, now supports search too!) ──
+        if (args.id === "latest" && args.type === "movie") {
             if (search) {
+                // Search: redirect to site search
                 const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
                 const html = await cachedFetch(searchUrl);
                 const videos = parseVideoCards(html);
                 return { metas: videos.map((v) => videoToMetaPreview(v)) };
             }
-            return { metas: [] };
-        }
-
-        // ── Latest Videos catalog (movie type) ──
-        if (args.id === "latest" && args.type === "movie") {
-            const url =
-                page > 1
-                    ? `${BASE_URL}/?page=${page}`
-                    : `${BASE_URL}/`;
+            const url = page > 1 ? `${BASE_URL}/?page=${page}` : `${BASE_URL}/`;
             const html = await cachedFetch(url);
             const videos = parseVideoCards(html);
             return { metas: videos.map((v) => videoToMetaPreview(v)) };
         }
 
-        // ── Most Popular catalog (movie type) ──
+        // ── Most Popular catalog (movie type, now supports search too!) ──
         if (args.id === "popular" && args.type === "movie") {
-            const url =
-                page > 1
-                    ? `${BASE_URL}/most-popular?page=${page}`
-                    : `${BASE_URL}/most-popular`;
+            if (search) {
+                // Search: redirect to site search
+                const searchUrl = `${BASE_URL}/search/${encodeURIComponent(search)}`;
+                const html = await cachedFetch(searchUrl);
+                const videos = parseVideoCards(html);
+                return { metas: videos.map((v) => videoToMetaPreview(v)) };
+            }
+            const url = page > 1 ? `${BASE_URL}/most-popular?page=${page}` : `${BASE_URL}/most-popular`;
             const html = await cachedFetch(url);
             const videos = parseVideoCards(html);
             return { metas: videos.map((v) => videoToMetaPreview(v)) };
@@ -697,10 +690,7 @@ async function buildChannelMeta(id, displayName, baseUrl, genre, posterShape) {
 
     for (let p = 1; p <= maxPages; p++) {
         try {
-            const pUrl =
-                p > 1
-                    ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}page=${p}`
-                    : baseUrl;
+            const pUrl = p > 1 ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}page=${p}` : baseUrl;
             const pHtml = await cachedFetch(pUrl);
             const pVideos = parseVideoCards(pHtml);
             if (pVideos.length === 0) break;
@@ -728,8 +718,7 @@ async function buildChannelMeta(id, displayName, baseUrl, genre, posterShape) {
         name: name,
         poster: "",
         posterShape: posterShape,
-        description:
-            pageTitle || `Browse ${name} on XXDBX \u2014 ${videos.length} videos`,
+        description: pageTitle || `Browse ${name} on XXDBX \u2014 ${videos.length} videos`,
         genres: [genre],
         videos: videos,
         links: [],
@@ -739,12 +728,6 @@ async function buildChannelMeta(id, displayName, baseUrl, genre, posterShape) {
 }
 
 // ─── STREAM HANDLER ─────────────────────────────────────────────────
-// THE KILLER FEATURE: Clickable navigation streams!
-// Each video's streams include:
-// 1. Proxy play streams (360p, 720p, 1080p)
-// 2. Clickable star streams (externalUrl -> stremio:///detail/channel/star_xxx)
-// 3. Clickable channel streams (externalUrl -> stremio:///detail/channel/ch_xxx)
-// 4. Clickable tag streams (externalUrl -> stremio:///detail/channel/tag_xxx)
 
 builder.defineStreamHandler(async (args) => {
     const { id, type } = args;
@@ -773,16 +756,12 @@ builder.defineStreamHandler(async (args) => {
             }
 
             // ── 2. Clickable navigation streams ──
-            // Fetch the video page to extract stars, channels, and tags
-            // Only scrape div.tags — the video's ACTUAL metadata
-            // NOT div.vids which contains related/suggested videos
             try {
                 const detailUrl = `${BASE_URL}/view/${videoId}`;
                 const html = await cachedFetch(detailUrl);
                 const detail = extractVideoDetail(html);
 
-                // Add clickable star streams (yellow star icon)
-                // Limit to actual stars from the video — NO random/related ones
+                // Add clickable star streams
                 for (const star of detail.stars.slice(0, 10)) {
                     streams.push({
                         name: "\u2b50 Star",
@@ -802,7 +781,7 @@ builder.defineStreamHandler(async (args) => {
                     });
                 }
 
-                // Add clickable tag streams (limited to first 10 to avoid clutter)
+                // Add clickable tag streams
                 for (const tag of detail.tags.slice(0, 10)) {
                     streams.push({
                         name: "\ud83c\udff7\ufe0f Tag",
